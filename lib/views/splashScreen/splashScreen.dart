@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:insync/views/authentication/signUp/signUp.dart';
+import 'package:insync/views/tutor/mainApp.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -9,7 +11,14 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    navigate(context, true);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -19,14 +28,22 @@ class _SplashScreenState extends State<SplashScreen> {
             colors: [Colors.blue, Colors.purple],
           ),
         ),
-        child: const Center(
-          child: Text(
-            'Insync Classroom',
-            style: TextStyle(
-              fontSize: 24,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/logo.png'),
+              const SizedBox(height: 15),
+              const Text(
+                'Insync Classroom',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -35,9 +52,17 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 void navigate(BuildContext context, bool isLogin) {
-  if (isLogin) {
-    Navigator.pushNamed(context, '/home');
-  } else {
-    Navigator.pushNamed(context, '/login');
-  }
+  Future.delayed(const Duration(seconds: 2)).then((value) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      // return const SignUp();
+      return const MainApp(
+        isTutor: true,
+      );
+    }));
+    // if (isLogin) {
+    //   Navigator.pushNamed(context, '/home');
+    // } else {
+    //   Navigator.pushNamed(context, '/login');
+    // }
+  });
 }

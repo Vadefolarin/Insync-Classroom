@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:insync/utils/colors.dart';
+import 'package:insync/views/authentication/signUp/signUp.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({super.key});
@@ -11,6 +13,7 @@ class Login extends ConsumerStatefulWidget {
 
 class _LoginState extends ConsumerState<Login> {
   final GlobalKey _formKey = GlobalKey<FormState>();
+  TextEditingController? controller;
 
   @override
   void initState() {
@@ -31,35 +34,156 @@ class _LoginState extends ConsumerState<Login> {
             children: [
               const Text(
                 'Continue Your learning  with Insync Classroom',
-                style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: kcolorMainPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF333333),
-                      borderRadius: BorderRadius.circular(10),
-                      //TODO: change color ONTAP
-                      border: Border.all(color: kcolorMainPrimarty, width: 4),
+              const SizedBox(height: 50),
+              const ChooseAccount(),
+              const SizedBox(height: 50),
+              const Text(
+                'Registered email address',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Nunito',
+                  fontWeight: FontWeight.w700,
+                  height: 0,
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: const Border.fromBorderSide(
+                    BorderSide(color: Colors.white),
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextFormField(
+                  controller: controller,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    hintText: 'Type your email',
+                    prefix: SvgPicture.asset('assets/icons/inputIcon.svg'),
+                    hintStyle: const TextStyle(color: Colors.white),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
+                        style: BorderStyle.solid,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 19, horizontal: 21),
-                    child: const Column(
-                      children: [
-                        Icon(Icons.person),
-                        Text(
-                          'Sign in as a tutor',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
+                        style: BorderStyle.solid,
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
+              const SizedBox(height: 25),
+              const Text(
+                'Password',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Nunito',
+                  fontWeight: FontWeight.w700,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  border: const Border.fromBorderSide(
+                    BorderSide(color: Colors.white),
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextFormField(
+                  controller: controller,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    hintText: 'Type your password',
+                    prefix: SvgPicture.asset('assets/icons/password.svg'),
+                    hintStyle: const TextStyle(color: Colors.white),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
+                        style: BorderStyle.solid,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 25),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Sign In',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    ),
+                    Icon(Icons.check_circle_rounded),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Forgot password? ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'click here',
+                      style: TextStyle(
+                        color: Color(0xFFC5D86D),
+                        fontSize: 16,
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w700,
+                        height: 0,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
