@@ -56,7 +56,7 @@ void navigate(BuildContext context, bool isLogin) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       // return const SignUp();
       return const MainApp(
-        isTutor: true,
+        isTutor: false,
       );
     }));
     // if (isLogin) {

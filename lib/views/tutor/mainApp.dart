@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:insync/utils/colors.dart';
+import 'package:insync/views/student/dashboard/home.dart';
+import 'package:insync/views/student/quizzes/quizzes.dart';
+import 'package:insync/views/student/results/results.dart';
 import 'package:insync/views/tutor/dashboard/home.dart';
 import 'package:insync/views/tutor/quizzes/quizzes.dart';
 import 'package:insync/views/tutor/results/results.dart';
@@ -133,11 +136,11 @@ class _MainAppState extends State<MainApp> {
                   ],
                 ),
                 body: value == 0
-                    ? const HomeScreen()
+                    ? const StudentHomeScreen()
                     : value == 1
-                        ? const QuizScreen()
+                        ? const StudentQuizzes()
                         : value == 2
-                            ? const ResultsScreen()
+                            ? const StudentResultsScreen()
                             : Container(),
               );
       },

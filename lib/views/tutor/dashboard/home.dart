@@ -97,7 +97,10 @@ class _HomeScreenState extends State<HomeScreen>
                   const SizedBox(height: 20),
                   const UpcomingQuizSlide(),
                   const SizedBox(height: 20),
-                  const CompletedtQuiz(),
+                  const CompletedtQuiz(
+                    isfullScreen: false,
+                  
+                  ),
                   const SizedBox(height: 20),
                   Container(
                     decoration: BoxDecoration(
@@ -283,7 +286,9 @@ class Group1 extends StatelessWidget {
 class CompletedtQuiz extends StatelessWidget {
   const CompletedtQuiz({
     super.key,
+    required this.isfullScreen,
   });
+  final bool isfullScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +313,7 @@ class CompletedtQuiz extends StatelessWidget {
         left: 15,
         right: 15,
       ),
-      child: const Column(
+      child: Column(
         children: [
           Row(
             children: [
@@ -323,21 +328,25 @@ class CompletedtQuiz extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              Text(
-                'Results',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
-              ),
+              isfullScreen
+                  ? SizedBox()
+                  : Text(
+                      'Results',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
               SizedBox(width: 5),
-              Icon(
-                Icons.arrow_forward,
-                color: Color(0xFFC5D86D),
-              )
+              isfullScreen
+                  ? SizedBox()
+                  : Icon(
+                      Icons.arrow_forward,
+                      color: Color(0xFFC5D86D),
+                    )
             ],
           ),
           SizedBox(height: 20),
@@ -528,9 +537,18 @@ class UpcomingQuizSlide extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                UpcomingQuizCard(),
-                UpcomingQuizCard(),
-                UpcomingQuizCard(),
+                UpcomingQuizCard(
+                  title: 'Introduction to computer\nprogramming',
+                  date: '12 / 03 / 2023 | 09:00 AM',
+                ),
+                UpcomingQuizCard(
+                  title: 'Theory of computation',
+                  date: '27 / 05 / 2023 | 12:30 PM',
+                ),
+                UpcomingQuizCard(
+                  title: 'Introduction to computer programming',
+                  date: '12 / 03 / 2023 | 09:00 AM',
+                ),
               ],
             ),
           ),
@@ -543,7 +561,11 @@ class UpcomingQuizSlide extends StatelessWidget {
 class UpcomingQuizCard extends StatelessWidget {
   const UpcomingQuizCard({
     super.key,
+    required this.title,
+    required this.date,
   });
+  final String title;
+  final String date;
 
   @override
   Widget build(BuildContext context) {
@@ -555,7 +577,7 @@ class UpcomingQuizCard extends StatelessWidget {
         ),
       ),
       margin: const EdgeInsets.only(right: 15),
-      padding: const EdgeInsets.only(right: 11),
+      padding: const EdgeInsets.only(right: 15),
       child: Row(
         children: [
           Container(
@@ -567,23 +589,24 @@ class UpcomingQuizCard extends StatelessWidget {
             ),
             child: Image.asset('assets/images/quiz1.png'),
           ),
-          const SizedBox(width: 15),
-          const Column(
+          const SizedBox(width: 10),
+          Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Introduction to computer programming',
-                style: TextStyle(
+                title,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 17,
                   fontFamily: 'Nunito',
                   fontWeight: FontWeight.w700,
                 ),
               ),
               Text(
-                '12 / 03 / 2023 | 09:00 AM',
-                style: TextStyle(
+                date,
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 14,
                   fontFamily: 'Nunito',
@@ -591,17 +614,6 @@ class UpcomingQuizCard extends StatelessWidget {
                   height: 0,
                 ),
               ),
-              SizedBox(height: 22),
-              Text(
-                'No. of student’s enrolled: 32',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: 'Nunito',
-                  fontWeight: FontWeight.w700,
-                  height: 0,
-                ),
-              )
             ],
           )
         ],
