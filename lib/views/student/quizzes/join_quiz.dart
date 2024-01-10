@@ -91,6 +91,8 @@ class _JoinQuizState extends ConsumerState<JoinQuiz> {
             ),
           ),
         ),
+       
+       
         const SizedBox(height: 53),
         Row(
           mainAxisSize: MainAxisSize.min,

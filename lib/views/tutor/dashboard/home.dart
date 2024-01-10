@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:insync/utils/colors.dart';
+import 'package:insync/views/tutor/quizzes/newQuiz.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,7 +25,16 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: const Color(0xFFFFEDDF),
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => const AlertDialog.adaptive(
+              backgroundColor: Colors.white,
+              contentPadding: EdgeInsets.all(0),
+              content: NewQuiz(),
+            ),
+          );
+        },
         label: const Row(
           children: [
             Icon(
@@ -62,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                           ),
                           Text(
-                            'Tutor',
+                            'vadedayo@futa.edu.ng',
                             style: TextStyle(
                               color: Color(0xFFC5D86D),
                               fontSize: 14,
@@ -99,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen>
                   const SizedBox(height: 20),
                   const CompletedtQuiz(
                     isfullScreen: false,
-                  
                   ),
                   const SizedBox(height: 20),
                   Container(
@@ -165,40 +174,30 @@ class _HomeScreenState extends State<HomeScreen>
                             fontWeight: FontWeight.w500,
                             fontFamily: 'poppins',
                           ),
-                          tabs: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: const Color(0xff0D1321),
-                                ),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                              ),
-                              child: const Tab(
-                                iconMargin: EdgeInsets.all(10),
-                                text: 'Group 1',
-                              ),
+                          tabs: const [
+                            Tab(
+                              iconMargin: EdgeInsets.all(10),
+                              text: 'Group 1',
                             ),
-                            const Tab(
+                            Tab(
                               text: 'Group 2',
                             ),
-                            const Tab(
+                            Tab(
                               text: 'Group 3',
                             ),
                           ],
                         ),
-                        // Expanded(
-                        //   child: TabBarView(
-                        //     controller: _tabController,
-                        //     children: const [
-                        //       Group1(),
-                        //       Group1(),
-                        //       Group1(),
-                        //     ],
-                        //   ),
-                        // ),
+                        SizedBox(
+                          height: 200,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: const [
+                              Group1(),
+                              Group1(),
+                              Group1(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -230,56 +229,45 @@ class Group1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Group 1',
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 18,
-        fontFamily: 'Nunito',
-        fontWeight: FontWeight.w700,
-        height: 0,
-      ),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Container(
+            width: 70,
+            height: 70,
+            decoration: ShapeDecoration(
+              image: const DecorationImage(
+                image: AssetImage('assets/images/quiz1.png'),
+                fit: BoxFit.cover,
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+            ),
+          ),
+          title: Text(
+            names[index],
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+              fontFamily: 'Nunito',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          subtitle: Text(
+            classRank[index],
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontFamily: 'Nunito',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          trailing: const Icon(Icons.arrow_forward),
+        );
+      },
     );
-    // Expanded(
-    //   child: ListView.builder(
-    //     itemCount: 5,
-    //     itemBuilder: (context, index) {
-    //       return ListTile(
-    //         leading: Container(
-    //           width: 70,
-    //           height: 70,
-    //           decoration: ShapeDecoration(
-    //             image: const DecorationImage(
-    //               image: AssetImage('assets/images/image.png'),
-    //               fit: BoxFit.cover,
-    //             ),
-    //             shape: RoundedRectangleBorder(
-    //                 borderRadius: BorderRadius.circular(5)),
-    //           ),
-    //         ),
-    //         title: Text(
-    //           names[index],
-    //           style: const TextStyle(
-    //             color: Colors.black,
-    //             fontSize: 18,
-    //             fontFamily: 'Nunito',
-    //             fontWeight: FontWeight.w600,
-    //           ),
-    //         ),
-    //         subtitle: Text(
-    //           classRank[index],
-    //           style: const TextStyle(
-    //             color: Colors.black,
-    //             fontSize: 14,
-    //             fontFamily: 'Nunito',
-    //             fontWeight: FontWeight.w400,
-    //           ),
-    //         ),
-    //         trailing: const Icon(Icons.arrow_forward),
-    //       );
-    //     },
-    //   ),
-    // );
   }
 }
 
@@ -317,7 +305,7 @@ class CompletedtQuiz extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
+              const Text(
                 'Completed Quizzes',
                 style: TextStyle(
                   color: Colors.black,
@@ -327,10 +315,10 @@ class CompletedtQuiz extends StatelessWidget {
                   height: 0,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               isfullScreen
-                  ? SizedBox()
-                  : Text(
+                  ? const SizedBox()
+                  : const Text(
                       'Results',
                       style: TextStyle(
                         color: Colors.black,
@@ -340,17 +328,17 @@ class CompletedtQuiz extends StatelessWidget {
                         height: 0,
                       ),
                     ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               isfullScreen
-                  ? SizedBox()
-                  : Icon(
+                  ? const SizedBox()
+                  : const Icon(
                       Icons.arrow_forward,
                       color: Color(0xFFC5D86D),
                     )
             ],
           ),
-          SizedBox(height: 20),
-          MyTable(),
+          const SizedBox(height: 20),
+          const MyTable(),
         ],
       ),
     );
@@ -581,7 +569,7 @@ class UpcomingQuizCard extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.25,
+            width: MediaQuery.of(context).size.width * 0.2,
             height: MediaQuery.of(context).size.height * 0.15,
             decoration: BoxDecoration(
               color: const Color(0xFFFFEDDF),
