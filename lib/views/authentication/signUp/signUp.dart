@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:insync/utils/loader.dart';
 import 'package:insync/utils/colors.dart';
+import 'package:insync/utils/utils.dart';
+import 'package:insync/views/authentication/controllers/auth_controller.dart';
 import 'package:insync/views/authentication/login/login.dart';
 import 'package:insync/views/tutor/mainApp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
@@ -15,12 +19,88 @@ class SignUp extends ConsumerStatefulWidget {
 class _SignUpState extends ConsumerState<SignUp> {
   TextEditingController? emailcontroller;
   TextEditingController? controller;
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController? firstnamecontroller;
 
   TextEditingController? lastnamecontroller;
 
   TextEditingController? passwordcontroller;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    firstnamecontroller?.dispose();
+    lastnamecontroller?.dispose();
+    controller?.dispose();
+    passwordcontroller?.dispose();
+    emailcontroller?.dispose();
+
+    super.dispose();
+  }
+
+  // sign user in method
+  void signUserIn() async {
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: Loader(),
+          );
+        },
+      );
+      try {
+        await ref.read(authControllerProvider).signInWithEmailAndPassword(
+              email: emailcontroller!.text,
+              password: passwordcontroller!.text,
+              context: context,
+            );
+        // print(
+        //     'XXXXXXXXXXXXXXXXXXXXXXXXXXxx${widget.email} XXXXXXXXXXXXXXXXX ${passwordController.text}');
+        // Navigator.pop(context);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const MainApp(
+              isTutor: true,
+            ),
+          ),
+          (route) => false,
+        );
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLoggedIn', true);
+      } catch (e) {
+        Navigator.pop(context);
+        if (e.toString().contains('too many requests, try again later')) {
+          showSnackBar(
+              context, "Too many requests, try again later", MessageType.error);
+        }
+        loginInErrorMessage(null);
+      }
+    }
+  }
+
+  void loginInErrorMessage(String? errorMsg) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey,
+          title: Center(
+            child: Text(
+              errorMsg ?? 'Incorrect login details',
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
