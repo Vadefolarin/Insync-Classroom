@@ -60,7 +60,8 @@ class _SignUpState extends ConsumerState<SignUp> {
               email: emailcontroller!.text,
               password: passwordcontroller!.text,
               context: context,
-              isTutor: 
+              //TODO: add a value notifier to listen if its tutuor or not
+              isTutor: true
             );
         // print(
         //     'XXXXXXXXXXXXXXXXXXXXXXXXXXxx${widget.email} XXXXXXXXXXXXXXXXX ${passwordController.text}');
@@ -143,7 +144,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  const ChooseAccount(),
+                  // const ChooseAccount(),
                   const SizedBox(height: 50),
                   Row(
                     children: [
@@ -494,68 +495,9 @@ class _SignUpState extends ConsumerState<SignUp> {
   }
 }
 
-class ChooseAccount extends StatefulWidget {
-  const ChooseAccount({
-    super.key,
-  });
 
-  @override
-  State<ChooseAccount> createState() => _ChooseAccountState();
-}
 
-class _ChooseAccountState extends State<ChooseAccount> {
-  late ValueNotifier<bool> _currentIndexNotifier;
 
-  @override
-  void initState() {
-    _currentIndexNotifier = ValueNotifier(false);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: _currentIndexNotifier,
-      builder: (context, bool value, child) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: InContainer(
-                color: value ? kcolorMainPrimary : Colors.white,
-                text: 'Sign up as a Tutor',
-                icon: 'assets/icons/tutor.svg',
-                onTap: () {
-                  print('--------------------');
-                  _currentIndexNotifier.value = !_currentIndexNotifier.value;
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //   return const SignUp();
-                  // }));
-                },
-              ),
-            ),
-            const SizedBox(width: 30),
-            Expanded(
-              child: InContainer(
-                color: !value ? kcolorMainPrimary : Colors.white,
-                text: 'Sign up as a Student',
-                icon: 'assets/icons/student.svg',
-                onTap: () {
-                  _currentIndexNotifier.value = !_currentIndexNotifier.value;
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  //   return const SignUp();
-                  // }));
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-        );
-      },
-    );
-  }
-}
 
 class InContainer extends StatelessWidget {
   const InContainer({
