@@ -33,7 +33,10 @@ class _SplashScreenState extends State<SplashScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/logo.png'),
+              Image.asset(
+                'assets/images/logo.png',
+                color: Colors.white,
+              ),
               const SizedBox(height: 15),
               const Text(
                 'Insync Classroom',
@@ -52,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 void navigate(BuildContext context, bool isLogin) {
-  Future.delayed(const Duration(seconds: 2)).then((value) {
+  Future.delayed(const Duration(seconds: 4)).then((value) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return const SignUp();
       // return const MainApp(

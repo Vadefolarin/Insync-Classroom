@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:insync/models/students/student_model.dart';
 import 'package:insync/models/teachers/teacher_model.dart';
@@ -32,10 +33,65 @@ class AuthService {
     required this.ref,
   });
 
-  Future<void> signInWithEmailAndPassword(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
+  Future<void> signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+    required BuildContext context,
+    required bool isTutor,
+  }) async {
+    try {
+      var cred = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (isTutor) {
+        await addNewTeacherToDatabase(cred.user!.uid);
+      } else {
+        await addNewStudentToDatabase(cred.user!.uid);
+      }
+
+      await getDeviceToken();
+    } on FirebaseAuthException catch (e) {}
+  }
+
+  Future<void> signUserUp({
+    required String email,
+    required String password,
+    required BuildContext context,
+    required bool isTutor,
+  }) async {
+    try {
+      var cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (isTutor) {
+        await addNewTeacherToDatabase(cred.user!.uid);
+      } else {
+        await addNewTeacherToDatabase(cred.user!.uid);
+      }
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      if (e.code == 'weak-password') {
+        throw Exception('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        throw Exception('The account already exists for that email.');
+      } else if (e.code == "Unable to establish connection on channel") {
+        throw Exception('Unable to establish connection on channel');
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+    required BuildContext context,
+    required bool isTutor,
+  }) async {
 // Teachermodel teachermodel = Teachermodel.initial().copyWith(
 //   uid:
 // );
@@ -46,11 +102,18 @@ class AuthService {
         password: password,
       );
 
-      Teachermodel? teacher = await getCurrentTeacherData();
-      if (teacher == null) {
-        // Add new user to the patient collection
-        await addNewTeacherToDatabase(cred.user!.uid);
+      if (isTutor) {
+        Teachermodel? teacher = await getCurrentTeacherData();
+        if (teacher == null) {
+          await addNewTeacherToDatabase(cred.user!.uid);
+        }
+      } else {
+        Studentmodel? student = await getCurrentStudentData();
+        if (student == null) {
+          await addNewTeacherToDatabase(cred.user!.uid);
+        }
       }
+
       await getDeviceToken();
     } on FirebaseAuthException catch (e) {}
   }
@@ -121,7 +184,23 @@ class AuthService {
         user: user,
       );
     } catch (e) {
-      log("DrWho: AuthService: addNewUserToDatabase: $e");
+      log("Insync: AuthService: addNewUserToDatabase: $e");
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> addNewStudentToDatabase(String uid) async {
+    var currentUser = auth.currentUser;
+    Studentmodel user = Studentmodel.initial().copyWith(
+      uid: uid,
+      email: currentUser != null ? currentUser.email : "",
+    );
+    try {
+      await saveStudentDataToFirebase(
+        user: user,
+      );
+    } catch (e) {
+      log("Insync: AuthService: addNewUserToDatabase: $e");
       throw Exception(e.toString());
     }
   }
@@ -150,6 +229,45 @@ class AuthService {
       }
       return false;
     } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> saveStudentDataToFirebase({
+    // File? profilePic,
+    required Studentmodel user,
+  }) async {
+    try {
+      if (user.firstName == '') {
+        await firestore.collection('student').doc(user.uid).set(user.toMap());
+      } else {
+        var updateUser = user.copyWith(
+          deviceToken: user.deviceToken,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          uid: user.uid,
+        );
+
+        await firestore
+            .collection('student')
+            .doc(user.uid)
+            .update(updateUser.toMap());
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> sendResetEmail(String? email) async {
+    try {
+      await auth.sendPasswordResetEmail(
+        email: email ?? auth.currentUser!.email!,
+      );
+    } catch (e) {
+      print("DrWho: sendResetEmail ${e.toString()}");
       throw Exception(e.toString());
     }
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../service/utilities_service.dart';
 
 class SubHeaderText2 extends StatelessWidget {
   final String text;
@@ -21,12 +20,12 @@ class SubHeaderText2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final isDarkMode = ref.watch(themeProvider).darkMode;
+      // final isDarkMode = ref.watch(themeProvider).darkMode;
       return Text(
         text,
         style: GoogleFonts.mulish(
-          textStyle: TextStyle(
-            color: setThemeColor(isDarkMode),
+          textStyle: const TextStyle(
+            // color: setThemeColor(isDarkMode),
             fontSize: 15,
             fontWeight: FontWeight.w400,
           ),

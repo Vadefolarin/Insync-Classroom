@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../service/utilities_service.dart';
 
 class ParagraphText extends StatelessWidget {
   final String text;
@@ -28,7 +27,7 @@ class ParagraphText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final isDarkMode = ref.watch(themeProvider).darkMode;
+      // final isDarkMode = ref.watch(themeProvider).darkMode;
       return RichText(
         maxLines: maxLines,
         softWrap: true,
@@ -36,7 +35,7 @@ class ParagraphText extends StatelessWidget {
           text: text,
           style: GoogleFonts.mulish(
             textStyle: TextStyle(
-              color: setThemeColor(isDarkMode),
+              // color: setThemeColor(isDarkMode),
               fontSize: fontSize ?? 15,
               fontWeight: FontWeight.w400,
             ),

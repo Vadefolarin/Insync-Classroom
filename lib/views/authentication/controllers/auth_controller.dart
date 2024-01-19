@@ -42,8 +42,22 @@ class AuthController {
     return user;
   }
 
+  Future<Studentmodel?> setStudentState() async {
+    Studentmodel? user = await getCurrentStudentData();
+    if (user != null) {
+      await AuthStore.setStudentstate(user);
+      ref.read(studentStateProvider.notifier).update((state) => user);
+    }
+    return user;
+  }
+
   Future<Teachermodel?> getCurrentTeacherData() async {
     Teachermodel? user = await authService.getCurrentTeacherData();
+    return user;
+  }
+
+  Future<Studentmodel?> getCurrentStudentData() async {
+    Studentmodel? user = await authService.getCurrentStudentData();
     return user;
   }
 
@@ -51,13 +65,30 @@ class AuthController {
     required String email,
     required String password,
     required BuildContext context,
+    required final bool isTutor,
   }) async {
     await authService.signInWithEmailAndPassword(
       email: email,
       password: password,
       context: context,
+      isTutor: isTutor,
+
     );
-    await setTeacherState();
+    isTutor ? setTeacherState() : setStudentState();
+  }
+
+  Future<void> signUp({
+   required String email,
+    required String password,
+    required BuildContext context,
+    required final bool isTutor,
+  }) async {
+  return await authService.signUserUp(
+      email: email,
+      password: password,
+      context: context,
+       isTutor: isTutor,
+    );
   }
 
   Future<void> signOut() async {

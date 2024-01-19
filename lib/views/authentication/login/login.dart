@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:insync/utils/colors.dart';
+import 'package:insync/utils/loader.dart';
+import 'package:insync/utils/utils.dart';
+import 'package:insync/views/authentication/controllers/auth_controller.dart';
 import 'package:insync/views/authentication/signUp/signUp.dart';
+import 'package:insync/views/tutor/mainApp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({super.key});
@@ -12,14 +17,80 @@ class Login extends ConsumerStatefulWidget {
 }
 
 class _LoginState extends ConsumerState<Login> {
-  final GlobalKey _formKey = GlobalKey<FormState>();
-  TextEditingController? controller;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController? emailController;
+  TextEditingController? passwordcontroller;
 
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    passwordcontroller?.dispose();
+    emailController?.dispose();
+    super.dispose();
+  }
+
+  // sign user in method
+  void signUserIn() async {
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: Loader(),
+          );
+        },
+      );
+      try {
+        await ref.read(authControllerProvider).signInWithEmailAndPassword(
+              email: emailController!.text,
+              password: passwordcontroller!.text,
+              context: context,
+            );
+        // print(
+        //     'XXXXXXXXXXXXXXXXXXXXXXXXXXxx${widget.email} XXXXXXXXXXXXXXXXX ${passwordController.text}');
+        // Navigator.pop(context);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const MainApp(
+              isTutor: true,
+            ),
+          ),
+          (route) => false,
+        );
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLoggedIn', true);
+      } catch (e) {
+        Navigator.pop(context);
+        if (e.toString().contains('too many requests, try again later')) {
+          showSnackBar(
+              context, "Too many requests, try again later", MessageType.error);
+        }
+        loginInErrorMessage(null);
+      }
+    }
+  }
+
+  void loginInErrorMessage(String? errorMsg) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey,
+          title: Center(
+            child: Text(
+              errorMsg ?? 'Incorrect login details',
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -36,6 +107,19 @@ class _LoginState extends ConsumerState<Login> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(
+                  height: 40,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
                 const Text(
                   'Continue Your learning  with Insync Classroom',
                   textAlign: TextAlign.center,
@@ -67,7 +151,7 @@ class _LoginState extends ConsumerState<Login> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: TextFormField(
-                    controller: controller,
+                    controller: emailController,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       fillColor: Colors.white,
@@ -94,6 +178,14 @@ class _LoginState extends ConsumerState<Login> {
                         ),
                       ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your email';
+                      } else if (!value.contains('@')) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(height: 25),
@@ -116,7 +208,7 @@ class _LoginState extends ConsumerState<Login> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: TextFormField(
-                    controller: controller,
+                    controller: passwordcontroller,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       fillColor: Colors.white,
@@ -142,32 +234,43 @@ class _LoginState extends ConsumerState<Login> {
                         ),
                       ),
                     ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(height: 25),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 32),
-                  child: const Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontFamily: 'Nunito',
-                            fontWeight: FontWeight.w700,
-                            height: 0,
+                InkWell(
+                  onTap: () {
+                    signUserIn();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 14, horizontal: 32),
+                    child: const Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Sign In',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                            ),
                           ),
-                        ),
-                        Icon(Icons.check_circle_rounded),
-                      ],
+                          Icon(Icons.check_circle_rounded),
+                        ],
+                      ),
                     ),
                   ),
                 ),
