@@ -39,7 +39,7 @@ class _LoginState extends ConsumerState<Login> {
   }
 
   // sign user in method
-  void signUserIn() async {
+  void signUserIn(bool isTutor) async {
     if (_formKey.currentState!.validate()) {
       showDialog(
         context: context,
@@ -56,7 +56,7 @@ class _LoginState extends ConsumerState<Login> {
               context: context,
               //TODO: add a value notifier to listen if its tutuor or not
 
-              isTutor: true,
+              isTutor: isTutor,
             );
         // print(
         //     'XXXXXXXXXXXXXXXXXXXXXXXXXXxx${widget.email} XXXXXXXXXXXXXXXXX ${passwordController.text}');
@@ -148,7 +148,7 @@ class _LoginState extends ConsumerState<Login> {
                         Expanded(
                           child: InContainer(
                             color: value ? kcolorMainPrimary : Colors.white,
-                            text: 'Sign up as a Tutor',
+                            text: 'Login up as a Tutor',
                             icon: 'assets/icons/tutor.svg',
                             onTap: () {
                               print('--------------------');
@@ -164,7 +164,7 @@ class _LoginState extends ConsumerState<Login> {
                         Expanded(
                           child: InContainer(
                             color: !value ? kcolorMainPrimary : Colors.white,
-                            text: 'Sign up as a Student',
+                            text: 'Login up as a Student',
                             icon: 'assets/icons/student.svg',
                             onTap: () {
                               _currentIndexNotifier.value =
@@ -181,9 +181,11 @@ class _LoginState extends ConsumerState<Login> {
 
                     // const ChooseAccount(),
                     const SizedBox(height: 50),
-                    const Text(
-                      'Registered email address or Matric number',
-                      style: TextStyle(
+                    Text(
+                      !value
+                          ? 'Login with your FUTA Student email address'
+                          : "Login with your Official Staff email  address",
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontFamily: 'Nunito',
@@ -294,15 +296,15 @@ class _LoginState extends ConsumerState<Login> {
                     const SizedBox(height: 25),
                     InkWell(
                       onTap: () {
-                        // signUserIn();
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const MainApp(
-                              isTutor: false,
-                            ),
-                          ),
-                          (route) => false,
-                        );
+                        signUserIn(!value ? true : false);
+                        // Navigator.of(context).pushAndRemoveUntil(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const MainApp(
+                        //       isTutor: false,
+                        //     ),
+                        //   ),
+                        //   (route) => false,
+                        // );
                       },
                       child: Container(
                         decoration: BoxDecoration(
