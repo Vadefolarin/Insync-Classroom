@@ -86,7 +86,7 @@ class _MainAppState extends State<MainApp> {
                     : value == 1
                         ? const QuizScreen()
                         : value == 2
-                            ? StudentsScreen()
+                            ? const StudentsScreen()
                             : value == 3
                                 ? const ResultsScreen()
                                 : Container(),

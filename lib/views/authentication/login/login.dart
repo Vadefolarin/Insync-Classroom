@@ -294,7 +294,15 @@ class _LoginState extends ConsumerState<Login> {
                     const SizedBox(height: 25),
                     InkWell(
                       onTap: () {
-                        signUserIn();
+                        // signUserIn();
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const MainApp(
+                              isTutor: false,
+                            ),
+                          ),
+                          (route) => false,
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(

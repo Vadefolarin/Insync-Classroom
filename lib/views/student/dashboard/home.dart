@@ -20,6 +20,7 @@ class StudentHomeScreen extends ConsumerWidget {
             ),
           );
         },
+        
         label: const Row(
           children: [
             Icon(
@@ -45,28 +46,25 @@ class StudentHomeScreen extends ConsumerWidget {
                 Row(
                   children: [
                     const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Adedayo Victor',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontFamily: 'Nunito',
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Adedayo Victor',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontFamily: 'Nunito',
+                            ),
                           ),
-                        ),
-                        Text(
-                          'IFT/17/2390',
-                          style: TextStyle(
-                            color: Color(0xFFC5D86D),
-                            fontSize: 14,
-                            fontFamily: 'Nunito',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
+                          Text('IFT/17/2390',
+                              style: TextStyle(
+                                color: Color(0xFFC5D86D),
+                                fontSize: 14,
+                                fontFamily: 'Nunito',
+                                fontWeight: FontWeight.w700,
+                              ))
+                        ]),
                     const Spacer(),
                     SvgPicture.asset('assets/icons/message.svg'),
                     const SizedBox(width: 10),
@@ -74,17 +72,15 @@ class StudentHomeScreen extends ConsumerWidget {
                       children: [
                         const Icon(Icons.notifications),
                         Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFC5D86D),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFC5D86D),
+                                  borderRadius: BorderRadius.circular(10),
+                                )))
                       ],
                     ),
                   ],

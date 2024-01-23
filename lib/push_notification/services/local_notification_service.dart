@@ -118,8 +118,8 @@ class LocalNotificationService {
     String? body,
     String? payload,
   ) {
-    log('DrWho: onDidReceiveNotificationResponse id $id');
-    log("DrWho: onDidReceiveNotificationResponse payload is here $payload");
+    log('Insync: onDidReceiveNotificationResponse id $id');
+    log("Insync: onDidReceiveNotificationResponse payload is here $payload");
   }
 
   // TODO: Consider how this will be used
@@ -132,7 +132,7 @@ class LocalNotificationService {
   // }
 
   onSelectNotification(NotificationResponse notificationResponse) async {
-    log("DrWho: payload is here ${notificationResponse.payload}");
+    log("Insync: payload is here ${notificationResponse.payload}");
     if (notificationResponse.payload != null &&
         notificationResponse.payload!.isNotEmpty) {
       var payloadData = jsonDecode(notificationResponse.payload!);

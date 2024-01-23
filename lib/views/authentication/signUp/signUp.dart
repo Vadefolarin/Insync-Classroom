@@ -60,12 +60,9 @@ class _SignUpState extends ConsumerState<SignUp> {
               email: emailcontroller!.text,
               password: passwordcontroller!.text,
               context: context,
-              //TODO: add a value notifier to listen if its tutuor or not
               isTutor: true
             );
-        // print(
-        //     'XXXXXXXXXXXXXXXXXXXXXXXXXXxx${widget.email} XXXXXXXXXXXXXXXXX ${passwordController.text}');
-        // Navigator.pop(context);
+ 
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const MainApp(
