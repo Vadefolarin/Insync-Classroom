@@ -17,18 +17,16 @@ class SignUp extends ConsumerStatefulWidget {
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SignUpState();
 }
-
+// https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=insync-class
 class _SignUpState extends ConsumerState<SignUp> {
   late ValueNotifier<bool> _currentIndexNotifier;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final firstnameController = TextEditingController();
+  final lastnameController = TextEditingController();
+  final controller = TextEditingController();
 
-  TextEditingController? emailcontroller;
-  TextEditingController? controller;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController? firstnamecontroller;
-
-  TextEditingController? lastnamecontroller;
-
-  TextEditingController? passwordcontroller;
 
   @override
   void initState() {
@@ -39,11 +37,11 @@ class _SignUpState extends ConsumerState<SignUp> {
 
   @override
   void dispose() {
-    firstnamecontroller?.dispose();
-    lastnamecontroller?.dispose();
-    controller?.dispose();
-    passwordcontroller?.dispose();
-    emailcontroller?.dispose();
+    firstnameController.dispose();
+    lastnameController.dispose();
+    controller.dispose();
+    passwordController.dispose();
+    emailController.dispose();
 
     super.dispose();
   }
@@ -59,10 +57,13 @@ class _SignUpState extends ConsumerState<SignUp> {
           );
         },
       );
+      print(emailController.text);
+      print(passwordController.text);
+
       try {
         await ref.read(authControllerProvider).signUp(
-              email: emailcontroller!.text,
-              password: passwordcontroller!.text,
+              email: emailController.text,
+              password: passwordController.text,
               context: context,
               isTutor: isTutor,
             );
@@ -83,6 +84,7 @@ class _SignUpState extends ConsumerState<SignUp> {
           showSnackBar(
               context, "Too many requests, try again later", MessageType.error);
         }
+        print('$e+++++++++++++');
         loginInErrorMessage(null);
       }
     }
@@ -216,7 +218,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: TextFormField(
-                                      controller: firstnamecontroller,
+                                      controller: firstnameController,
                                       style:
                                           const TextStyle(color: Colors.white),
                                       decoration: InputDecoration(
@@ -284,7 +286,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: TextFormField(
-                                      controller: lastnamecontroller,
+                                      controller: lastnameController,
                                       style:
                                           const TextStyle(color: Colors.white),
                                       decoration: InputDecoration(
@@ -350,7 +352,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: TextFormField(
-                            controller: emailcontroller,
+                            controller: emailController,
                             style: const TextStyle(color: Colors.white),
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
@@ -390,10 +392,13 @@ class _SignUpState extends ConsumerState<SignUp> {
                               } else if (value.contains('..')) {
                                 return 'Please enter a valid email';
                                 // You can remove it and specify it to your taste
-                              } else if (!value.contains('futa.edu.ng') ||
-                                  !value.contains('Futa.edu.ng') ||
-                                  !value.contains('FUTA.edu.ng') ||
-                                  !value.contains('FUTA.EDU.NG.')) {
+                              } else if (!value.contains('futa.edu.ng')
+                                  // ||
+                                  //     !value.contains('Futa.edu.ng') ||
+                                  //     !value.contains('FUTA.edu.ng') ||
+                                  //     !value.contains('FUTA.EDU.NG.')
+
+                                  ) {
                                 return 'Not a valid FUTA email address';
                               }
                               return null;
@@ -420,7 +425,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: TextFormField(
-                            controller: passwordcontroller,
+                            controller: passwordController,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               fillColor: Colors.white,

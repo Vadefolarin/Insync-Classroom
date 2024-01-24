@@ -20,8 +20,8 @@ class _LoginState extends ConsumerState<Login> {
   late ValueNotifier<bool> _currentIndexNotifier;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController? emailController;
-  TextEditingController? passwordcontroller;
+ final emailController =  TextEditingController();
+final passwordcontroller = TextEditingController();
 
   @override
   void initState() {
@@ -33,8 +33,8 @@ class _LoginState extends ConsumerState<Login> {
 
   @override
   void dispose() {
-    passwordcontroller?.dispose();
-    emailController?.dispose();
+    passwordcontroller.dispose();
+    emailController.dispose();
     super.dispose();
   }
 
@@ -51,8 +51,8 @@ class _LoginState extends ConsumerState<Login> {
       );
       try {
         await ref.read(authControllerProvider).signInWithEmailAndPassword(
-              email: emailController!.text,
-              password: passwordcontroller!.text,
+              email: emailController.text,
+              password: passwordcontroller.text,
               context: context,
               //TODO: add a value notifier to listen if its tutuor or not
 

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:insync/firebase_options.dart';
 import 'package:insync/views/authentication/store/auth_store.dart';
 import 'package:insync/views/splashScreen/splashScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,14 +11,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  Firebase.initializeApp();
+  // Firebase.initializeApp();
   
 
-  // var initializeApp = Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  var initializeApp = Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  // await initializeApp;
+   await initializeApp;
   final prefs = await SharedPreferences.getInstance();
   final pref = prefs.getBool('isLoggedIn') ?? false;
   final showOnboarding = await AuthStore.getShowOnboarding();
