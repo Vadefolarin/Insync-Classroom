@@ -11,12 +11,15 @@ import 'package:insync/views/authentication/login/login.dart';
 import 'package:insync/views/tutor/mainApp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../student/quizzes/quiz_screen.dart';
+
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SignUpState();
 }
+
 // https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=insync-class
 class _SignUpState extends ConsumerState<SignUp> {
   late ValueNotifier<bool> _currentIndexNotifier;
@@ -48,46 +51,65 @@ class _SignUpState extends ConsumerState<SignUp> {
 
   // sign user in method
   void signUserUp(bool isTutor) async {
-    if (_formKey.currentState!.validate()) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: Loader(),
-          );
-        },
-      );
-      print(emailController.text);
-      print(passwordController.text);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const QuizScreen(),
+      ),
+      (route) => false,
+    );
+    // if (_formKey.currentState!.validate()) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return const Center(
+    //         child: L oader(),
+    //       );
+    //     },
+    //   );
+    //   print(emailController.text);
+    //   print(passwordController.text);
 
-      try {
-        await ref.read(authControllerProvider).signUp(
-              email: emailController.text,
-              password: passwordController.text,
-              context: context,
-              isTutor: isTutor,
-            );
+    //   try {
+    //     await ref.read(authControllerProvider).signUp(
+    //           email: emailController.text,
+    //           password: passwordController.text,
+    //           context: context,
+    //           isTutor: isTutor,
+    //         );
 
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const MainApp(
-              isTutor: true,
-            ),
-          ),
-          (route) => false,
-        );
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setBool('isLoggedIn', true);
-      } catch (e) {
-        Navigator.pop(context);
-        if (e.toString().contains('too many requests, try again later')) {
-          showSnackBar(
-              context, "Too many requests, try again later", MessageType.error);
-        }
-        print('$e+++++++++++++');
-        loginInErrorMessage(null);
-      }
-    }
+    //     Navigator.of(context).pushAndRemoveUntil(
+    //       MaterialPageRoute(
+    //         builder: (context) => const MainApp(
+    //           isTutor: true,
+    //         ),
+    //       ),
+    //       (route) => false,
+    //     );
+    //     final prefs = await SharedPreferences.getInstance();
+    //     prefs.setBool('isLoggedIn', true);
+    //   } catch (e) {
+    //     Navigator.pop(context);
+    //     if (e.toString().contains('too many requests, try again later')) {
+    //       showSnackBar(
+    //           context, "Too many requests, try again later", MessageType.error);
+    //     } else if (e.toString().contains('email-already-in-use')) {
+    //       showSnackBar(context, "Email already in use", MessageType.error);
+    //     } else if (e.toString().contains('invalid-email')) {
+    //       showSnackBar(context, "Invalid email", MessageType.error);
+    //     } else if (e.toString().contains('weak-password')) {
+    //       showSnackBar(context, "Weak password", MessageType.error);
+    //     } else if (e.toString()
+    //         .contains(' The account already exists for that email')) {
+    //       showSnackBar(context, "The account already exists for that email",
+    //           MessageType.error);
+    //     } else {
+    //       showSnackBar(context, "An error occured", MessageType.error);
+    //     }
+    //     ;
+    //     print('$e+++++++++++++');
+    //     loginInErrorMessage(null);
+    //   }
+    // }
   }
 
   void loginInErrorMessage(String? errorMsg) {

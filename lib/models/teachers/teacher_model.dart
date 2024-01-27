@@ -33,11 +33,11 @@ class Teachermodel {
 
   factory Teachermodel.fromMap(Map<String, dynamic> map) {
     var data = Teachermodel(
-      uid: map['uid'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      deviceToken: map['deviceToken'],
-      email: map['email'],
+      uid: map['uid'] ?? '',
+      firstName: map['firstName'] ?? '',
+      lastName: map['lastName'] ?? '',
+      deviceToken: map['deviceToken'] ?? '',
+      email: map['email'] ?? '',
     );
     return data;
     //  Teachermodel(

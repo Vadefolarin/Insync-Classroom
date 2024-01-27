@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
 
@@ -33,7 +35,7 @@ class AuthService {
     required this.ref,
   });
 
-  Future<void> signUpWithEmailAndPassword({
+  FutureOr<void> signUpWithEmailAndPassword({
     required String email,
     required String password,
     required BuildContext context,
@@ -45,17 +47,19 @@ class AuthService {
         password: password,
       );
 
-      if (isTutor) {
-        await addNewTeacherToDatabase(cred.user!.uid);
+      if (isTutor == true) {
+        await addNewTeacherToDatabase(cred.user!.uid).then((value) {
+          Navigator.pop(context);
+        });
       } else {
-        await addNewStudentToDatabase(cred.user!.uid);
+        await addNewStudentToDatabase(cred.user!.uid).then((value) {
+          Navigator.pop(context);
+        });
       }
-
-      await getDeviceToken();
     } on FirebaseAuthException catch (e) {}
   }
 
-  Future<void> signUserUp({
+  FutureOr<void> signUserUp({
     required String email,
     required String password,
     required BuildContext context,
@@ -66,10 +70,21 @@ class AuthService {
         email: email,
         password: password,
       );
-      if (isTutor) {
-        await addNewTeacherToDatabase(cred.user!.uid);
+
+      print('User created${cred.user!.uid}');
+      print('checktotor$isTutor');
+
+      if (isTutor == true) {
+        print('Tutor created${cred.user!.uid}');
+        await addNewTeacherToDatabase(cred.user!.uid).then((value) {
+          Navigator.pop(context);
+        });
       } else {
-        await addNewTeacherToDatabase(cred.user!.uid);
+        print('Student created${cred.user!.uid}');
+
+        await addNewStudentToDatabase(cred.user!.uid).then((value) {
+          Navigator.pop(context);
+        });
       }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
@@ -86,7 +101,7 @@ class AuthService {
     }
   }
 
-  Future<void> signInWithEmailAndPassword({
+  FutureOr<void> signInWithEmailAndPassword({
     required String email,
     required String password,
     required BuildContext context,
@@ -110,15 +125,17 @@ class AuthService {
       } else {
         Studentmodel? student = await getCurrentStudentData();
         if (student == null) {
-          await addNewTeacherToDatabase(cred.user!.uid);
+          await addNewStudentToDatabase(cred.user!.uid);
         }
       }
 
-      await getDeviceToken();
+      //TODO: Get Device Token 
+
+      // await getDeviceToken();
     } on FirebaseAuthException catch (e) {}
   }
 
-  Future<Teachermodel?> getCurrentTeacherData() async {
+  FutureOr<Teachermodel?> getCurrentTeacherData() async {
     try {
       var user = auth.currentUser;
       if (user != null) {
@@ -130,30 +147,46 @@ class AuthService {
       }
       return null;
     } catch (e) {
-      log("DrWho: AuthService: getCurrentUserData: $e");
+      log("inSync: AuthService: getCurrentUserData: $e");
       throw Exception(e.toString());
     }
   }
 
-  Future<void> signOut() async {
+  FutureOr<void> signOut() async {
     await auth.signOut();
   }
 
   // Get and save device token for firebase messaging
-  Future<void> getDeviceToken() async {
+  Future<void> getCurrentTeacherToken() async {
     await firebaseMessaging.getToken().then((String? token) async {
       assert(token != null);
-      saveTeacherToDatabase(token!);
+      saveTeacherTokenToDatabase(token!);
     });
   }
 
-  Future<void> saveTeacherToDatabase(String token) async {
+  FutureOr<void> saveTeacherTokenToDatabase(String token) async {
     final uId = auth.currentUser!.uid;
 
-    await firestore.collection('teacher').doc(uId).update({
+    await firestore.collection('teachers').doc(uId).update({
       'deviceToken': token,
     });
     await firebaseMessaging.subscribeToTopic("teacherAnnouncements");
+  }
+
+  Future<void> getStudenDeviceToken() async {
+    await firebaseMessaging.getToken().then((String? token) async {
+      assert(token != null);
+      saveTeacherTokenToDatabase(token!);
+    });
+  }
+
+  Future<void> saveStudentTokenToDatabase(String token) async {
+    final uId = auth.currentUser!.uid;
+
+    await firestore.collection('students').doc(uId).update({
+      'deviceToken': token,
+    });
+    await firebaseMessaging.subscribeToTopic("studentAnnouncements");
   }
 
   Future<Studentmodel?> getCurrentStudentData() async {
@@ -168,51 +201,45 @@ class AuthService {
       }
       return null;
     } catch (e) {
-      log("DrWho: AuthService: getCurrentUserData: $e");
+      log("inSync: AuthService: getCurrentUserData: $e");
       throw Exception(e.toString());
     }
   }
 
   Future<void> addNewTeacherToDatabase(String uid) async {
-    var currentUser = auth.currentUser;
-    Teachermodel user = Teachermodel.initial().copyWith(
-      uid: uid,
-      email: currentUser != null ? currentUser.email : "",
+    var user = Teachermodel.initial();
+    user = user.copyWith(uid: uid);
+
+    await saveTeacherDataToFirebase(
+      user: user,
     );
-    try {
-      await saveTeacherDataToFirebase(
-        user: user,
-      );
-    } catch (e) {
-      log("Insync: AuthService: addNewUserToDatabase: $e");
-      throw Exception(e.toString());
-    }
+
+    // await getDeviceToken();
   }
 
   Future<void> addNewStudentToDatabase(String uid) async {
-    var currentUser = auth.currentUser;
-    Studentmodel user = Studentmodel.initial().copyWith(
-      uid: uid,
-      email: currentUser != null ? currentUser.email : "",
+    // var currentUser = auth.currentUser;
+    var user = Studentmodel.initial();
+    user = user.copyWith(uid: uid);
+
+    await saveStudentDataToFirebase(
+      user: user,
     );
-    try {
-      await saveStudentDataToFirebase(
-        user: user,
-      );
-    } catch (e) {
-      log("Insync: AuthService: addNewUserToDatabase: $e");
-      throw Exception(e.toString());
-    }
+    // await getDeviceToken();
   }
 
   Future<bool> saveTeacherDataToFirebase({
     // File? profilePic,
     required Teachermodel user,
   }) async {
+    print('before try...........................');
     try {
-      if (user.firstName == '') {
-        await firestore.collection('teacher').doc(user.uid).set(user.toMap());
+      if (user.firstName?.isEmpty ?? true) {
+        print('.... ${user.firstName}');
+        await firestore.collection('teachers').doc(user.uid).set(user.toMap());
       } else {
+        print('.... +++++++++ ${user.firstName}');
+
         var updateUser = user.copyWith(
           deviceToken: user.deviceToken,
           email: user.email,
@@ -238,8 +265,8 @@ class AuthService {
     required Studentmodel user,
   }) async {
     try {
-      if (user.firstName == '') {
-        await firestore.collection('student').doc(user.uid).set(user.toMap());
+      if (user.firstName?.isEmpty ?? true) {
+        await firestore.collection('students').doc(user.uid).set(user.toMap());
       } else {
         var updateUser = user.copyWith(
           deviceToken: user.deviceToken,
@@ -250,7 +277,7 @@ class AuthService {
         );
 
         await firestore
-            .collection('student')
+            .collection('students')
             .doc(user.uid)
             .update(updateUser.toMap());
         return true;
@@ -267,7 +294,7 @@ class AuthService {
         email: email ?? auth.currentUser!.email!,
       );
     } catch (e) {
-      print("DrWho: sendResetEmail ${e.toString()}");
+      print("inSync: sendResetEmail ${e.toString()}");
       throw Exception(e.toString());
     }
   }
