@@ -10,6 +10,8 @@ class NewQuiz extends ConsumerStatefulWidget {
 }
 
 class _NewQuizState extends ConsumerState<NewQuiz> {
+  final titleController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,7 +48,9 @@ class _NewQuizState extends ConsumerState<NewQuiz> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CreateQuizScreen(),
+                          builder: (context) => CreateQuizScreen(
+                            title: titleController.text,
+                          ),
                         ),
                       );
                     },
@@ -99,6 +103,7 @@ class _NewQuizState extends ConsumerState<NewQuiz> {
                   ),
                   const SizedBox(height: 11),
                   TextFormField(
+                    controller: titleController,
                     decoration: InputDecoration(
                       prefixIcon: Container(
                           width: 70,
