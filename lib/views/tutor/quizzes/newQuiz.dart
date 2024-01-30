@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:insync/views/tutor/quizzes/create_quiz_screen.dart';
 
 class NewQuiz extends ConsumerStatefulWidget {
   const NewQuiz({super.key});
@@ -41,7 +42,13 @@ class _NewQuizState extends ConsumerState<NewQuiz> {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CreateQuizScreen(),
+                        ),
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(

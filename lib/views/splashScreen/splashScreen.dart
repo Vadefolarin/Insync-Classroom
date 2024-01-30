@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:insync/views/authentication/signUp/signUp.dart';
 import 'package:insync/views/tutor/mainApp.dart';
+import 'package:insync/views/tutor/quizzes/create_quiz_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -57,7 +58,8 @@ class _SplashScreenState extends State<SplashScreen> {
 void navigate(BuildContext context, bool isLogin) {
   Future.delayed(const Duration(seconds: 4)).then((value) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const SignUp();
+      return const CreateQuizScreen();
+      //   return const SignUp();
       // return const MainApp(
       //   isTutor: false,
       // );

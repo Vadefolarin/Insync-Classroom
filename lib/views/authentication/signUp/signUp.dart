@@ -53,7 +53,8 @@ class _SignUpState extends ConsumerState<SignUp> {
   void signUserUp(bool isTutor) async {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => const QuizScreen(),
+        builder: (context) => MainApp(isTutor: isTutor),
+        //  const QuizScreen(),
       ),
       (route) => false,
     );
@@ -355,7 +356,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                         const SizedBox(height: 25),
                         Text(
                           !value
-                              ? 'Registered with your FUTA Student email address'
+                              ? 'Register with your FUTA Student email address'
                               : "Resgister with your Official Staff email  address",
                           style: const TextStyle(
                             color: Colors.white,
@@ -486,7 +487,8 @@ class _SignUpState extends ConsumerState<SignUp> {
                         const SizedBox(height: 35),
                         InkWell(
                           onTap: () {
-                            signUserUp(!value ? true : false);
+                            //print(!value ? true : false);
+                            signUserUp(value ? true : false);
                             // Navigator.pushReplacement(
                             //   context,
                             //   MaterialPageRoute(
