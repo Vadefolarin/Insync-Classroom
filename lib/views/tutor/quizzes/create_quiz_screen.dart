@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:insync/utils/loader.dart';
 
-List<String> answer = <String>['true', 'false'];
+List<String> booleananswer = <String>['true', 'false'];
+List<String> answers = [];
 
 class CreateQuizScreen extends StatefulWidget {
   final String title;
-  const CreateQuizScreen({super.key, required this.title});
+  final String? description;
+  const CreateQuizScreen({super.key, required this.title, this.description});
 
   @override
   _CreateQuizScreenState createState() => _CreateQuizScreenState();
@@ -15,14 +17,13 @@ class CreateQuizScreen extends StatefulWidget {
 
 class _CreateQuizScreenState extends State<CreateQuizScreen> {
   List<String> questions = [];
-  List<String> answers = [];
 
   @override
   Widget build(BuildContext context) {
     print('................... $questions----------------');
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Quiz'),
+        title: Text('${widget.title} Quiz'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addQuestion,
@@ -33,6 +34,19 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey[200],
+              ),
+              child: Text('${widget.description}',
+                  style: const TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center),
+            ),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: questions.length,
@@ -52,7 +66,9 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                           child: TextFormField(
                             decoration: InputDecoration(
                               border: const OutlineInputBorder(),
-                              hintText: 'Enter question ${index + 1}',
+                              hintText:
+                                  '             Enter question ${index + 1}',
+                              errorMaxLines: 2,
                               prefixIcon: const DropDownMenuBody(),
                               suffixIcon: IconButton(
                                 onPressed: () {
@@ -70,7 +86,11 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                             onChanged: (value) {
                               setState(() {
                                 questions[index] = value;
-                                postQuestions[value] = answer[index];
+                                postQuestions['questions'] =
+                                    List.from(questions).toString();
+                                // postQuestions['answers'] =
+                                //     List.from(answers).toString();
+                                // postQuestions.update(key, (value) => null)
 
                                 // postQuestions.entries
                                 //     .map((e) => e.key == value
@@ -86,7 +106,30 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
             ),
             InkWell(
               onTap: () {
-                _sendQuestions();
+                // _sendQuestions();
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    content: const Text(
+                        'Are you sure you want to send question?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20)),
+                    actions: [
+                      InkWell(
+                        onTap: () {
+                          _sendQuestions();
+                        },
+                        child: const Text('Yes'),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('No'),
+                      ),
+                    ],
+                  ),
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -122,24 +165,43 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
   }
 
   void _sendQuestions() async {
+    print(postQuestions.toString());
     const Loader();
 
     CollectionReference question =
         FirebaseFirestore.instance.collection('teachers');
 
-    question.doc('questions').set(widget.title).then(
-      (value) {
-        print("Quiz Added");
-        Navigator.pop(context);
-      },
-    ).catchError(
-      (error) {
-        print("Failed to add quiz: $error");
-        Navigator.pop(context);
-      },
-    );
+    if (postQuestions.isNotEmpty) {
+      question.doc(widget.title).set(postQuestions).then(
+        (value) {
+          // postQuestions;
 
-    // DocumentSnapshot? documentSnapshot = await question.doc('uniqueId').get();
+          print("Quiz Added");
+          Navigator.pop(context);
+        },
+      ).catchError(
+        (error) {
+          print("Failed to add quiz: $error");
+          Navigator.pop(context);
+        },
+      );
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: const Text('You have not set any question yet'),
+              actions: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          });
+    }
   }
 }
 
@@ -157,21 +219,23 @@ class DropDownMenuBody extends ConsumerStatefulWidget {
 }
 
 class _DropDownMenuBodyState extends ConsumerState<DropDownMenuBody> {
-  String dropdownValue = answer.first;
+  String dropdownValue = booleananswer.first;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-      expandedInsets: const EdgeInsets.all(16.0),
-      width: 30,
-      initialSelection: answer.first,
+      width: 120,
+      // initialSelection: booleananswer.first,
+      hintText: 'Answer',
       onSelected: (String? value) {
         setState(() {
           dropdownValue = value!;
+          answers.add(dropdownValue);
+          postQuestions['answers'] = List.from(answers).toString();
         });
       },
       dropdownMenuEntries:
-          answer.map<DropdownMenuEntry<String>>((String value) {
+          booleananswer.map<DropdownMenuEntry<String>>((String value) {
         return DropdownMenuEntry<String>(value: value, label: value);
       }).toList(),
     );

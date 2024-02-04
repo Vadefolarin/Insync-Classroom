@@ -58,11 +58,13 @@ class _SplashScreenState extends State<SplashScreen> {
 void navigate(BuildContext context, bool isLogin) {
   Future.delayed(const Duration(seconds: 4)).then((value) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      // return const CreateQuizScreen();
-      return const SignUp();
-      // return const MainApp(
-      //   isTutor: false,
+      // return const CreateQuizScreen(
+      //   title: 'Create Quiz',
       // );
+      //  return const SignUp();
+      return const MainApp(
+        isTutor: true,
+      );
     }));
     // if (isLogin) {
     //   Navigator.pushNamed(context, '/home');
