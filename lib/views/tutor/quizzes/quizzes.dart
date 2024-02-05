@@ -99,11 +99,12 @@ class QuizScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              const Expanded(
+              Expanded(
                 child: TabBarView(
                   children: [
-                    StudentUpcomingQuizSlide(isfullScreen: true),
-                    CompletedtQuiz(isfullScreen: true),
+                    StudentUpcomingQuizSlide(
+                        isfullScreen: true, upcomingQuizData: const []),
+                    const CompletedtQuiz(isfullScreen: true),
                   ],
                 ),
               ),

@@ -8,8 +8,12 @@ List<String> answers = [];
 
 class CreateQuizScreen extends StatefulWidget {
   final String title;
-  final String? description;
-  const CreateQuizScreen({super.key, required this.title, this.description});
+  final String description;
+  const CreateQuizScreen({
+    super.key,
+    required this.title,
+    required this.description,
+  });
 
   @override
   _CreateQuizScreenState createState() => _CreateQuizScreenState();
@@ -42,7 +46,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.grey[200],
               ),
-              child: Text('${widget.description}',
+              child: Text(widget.description,
                   style: const TextStyle(fontSize: 20),
                   textAlign: TextAlign.center),
             ),
@@ -86,8 +90,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
                             onChanged: (value) {
                               setState(() {
                                 questions[index] = value;
-                                postQuestions['questions'] =
-                                    List.from(questions).toString();
+                                postQuestions['questions'] = questions;
+                                // List.from(questions);
                                 // postQuestions['answers'] =
                                 //     List.from(answers).toString();
                                 // postQuestions.update(key, (value) => null)
@@ -165,6 +169,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
   }
 
   void _sendQuestions() async {
+    postQuestions['title'] = widget.title;
+    postQuestions['description'] = widget.description;
     print(postQuestions.toString());
     const Loader();
 
@@ -205,7 +211,7 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
   }
 }
 
-Map<String, String> postQuestions = {
+Map<String, dynamic> postQuestions = {
   // 'question': 'true',
   // 'answer': 'false',
 };
@@ -231,7 +237,9 @@ class _DropDownMenuBodyState extends ConsumerState<DropDownMenuBody> {
         setState(() {
           dropdownValue = value!;
           answers.add(dropdownValue);
-          postQuestions['answers'] = List.from(answers).toString();
+          postQuestions['answers'] = answers;
+
+          // List.from(answers).toString();
         });
       },
       dropdownMenuEntries:

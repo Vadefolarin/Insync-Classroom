@@ -1,14 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:insync/views/student/quizzes/join_quiz.dart';
+import 'package:insync/views/student/quizzes/quiz_screen.dart';
 import 'package:insync/views/tutor/dashboard/home.dart';
 
-class StudentHomeScreen extends ConsumerWidget {
+class StudentHomeScreen extends StatefulWidget {
   const StudentHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<StudentHomeScreen> createState() => _StudentHomeScreenState();
+}
+
+class _StudentHomeScreenState extends State<StudentHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  List upComingQuizdata = [];
+
+  @override
+  Widget build(BuildContext context) {
+    getQuestions();
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: const Color(0xFFFFEDDF),
@@ -20,7 +35,6 @@ class StudentHomeScreen extends ConsumerWidget {
             ),
           );
         },
-        
         label: const Row(
           children: [
             Icon(
@@ -86,7 +100,10 @@ class StudentHomeScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                const StudentUpcomingQuizSlide(isfullScreen: false),
+                StudentUpcomingQuizSlide(
+                  isfullScreen: false,
+                  upcomingQuizData: upComingQuizdata,
+                ),
                 const SizedBox(height: 20),
                 const CompletedtQuiz(
                   isfullScreen: false,
@@ -99,14 +116,33 @@ class StudentHomeScreen extends ConsumerWidget {
       ),
     );
   }
+
+  void getQuestions() async {
+    CollectionReference questions =
+        FirebaseFirestore.instance.collection('teachers');
+
+    QuerySnapshot querySnapshot = await questions.get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    Future.delayed(const Duration(seconds: 5), () {
+      print('++++ $allData++++');
+      setState(() {
+        upComingQuizdata = allData;
+      });
+      print('________________________ ');
+
+      print('${upComingQuizdata.map((e) => e['title'])}');
+    });
+  }
 }
 
 class StudentUpcomingQuizSlide extends StatelessWidget {
-  const StudentUpcomingQuizSlide({
+  StudentUpcomingQuizSlide({
     super.key,
     required this.isfullScreen,
+    required this.upcomingQuizData,
   });
   final bool isfullScreen;
+  List upcomingQuizData;
 
   @override
   Widget build(BuildContext context) {
@@ -168,19 +204,49 @@ class StudentUpcomingQuizSlide extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          const SingleChildScrollView(
+          SingleChildScrollView(
             child: Column(
-              children: [
-                UpcomingQuizCard(
-                  title: 'Introduction to computer\nprogramming',
-                  date: '12 / 03 / 2023 | 09:00 AM',
-                ),
-                SizedBox(height: 20),
-                UpcomingQuizCard(
-                  title: 'Theory of computation',
-                  date: '27 / 05 / 2023 | 12:30 PM',
-                ),
-              ],
+              children: upcomingQuizData
+                  .map(
+                    (e) => InkWell(
+                      onTap: () {
+                        List newQuestion = e['questions'];
+                        List newAnswer = e['answers'];
+                        // newQuestion.add(e['questions'].toString());
+                        // newQuestion.expand((element) );
+
+                        // print(newQuestion);
+
+                        print(newAnswer);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QuizScreen(
+                              // question: e['questions'],
+                              question: newQuestion,
+                              quizanswers: newAnswer,
+                            ),
+                          ),
+                        );
+                      },
+                      child: UpcomingQuizCard(
+                        title: e['title'],
+                        date: e['description'],
+                      ),
+                    ),
+                  )
+                  .toList(),
+
+              // UpcomingQuizCard(
+              //   title: 'Introduction to computer\nprogramming',
+              //   date: '12 / 03 / 2023 | 09:00 AM',
+              // ),
+              // SizedBox(height: 20),
+              // UpcomingQuizCard(
+              //   title: 'Theory of computation',
+              //   date: '27 / 05 / 2023 | 12:30 PM',
+              // ),
+              // ],
             ),
           ),
         ],

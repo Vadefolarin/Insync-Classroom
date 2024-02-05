@@ -12,13 +12,12 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Firebase.initializeApp();
-  
 
   var initializeApp = Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-   await initializeApp;
+  await initializeApp;
   final prefs = await SharedPreferences.getInstance();
   final pref = prefs.getBool('isLoggedIn') ?? false;
   final showOnboarding = await AuthStore.getShowOnboarding();

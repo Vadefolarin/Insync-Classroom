@@ -63,7 +63,7 @@ void navigate(BuildContext context, bool isLogin) {
       // );
       //  return const SignUp();
       return const MainApp(
-        isTutor: true,
+        isTutor: false,
       );
     }));
     // if (isLogin) {

@@ -17,27 +17,26 @@ class StudentQuizzes extends ConsumerWidget {
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         ),
-        body: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             children: [
-              TabBar(
+              const TabBar(
                 tabs: [
                   Tab(text: 'Upcoming'),
                   Tab(text: 'Completed'),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Expanded(
                 child: TabBarView(
                   children: [
-                    StudentUpcomingQuizSlide(isfullScreen: true),
-                    CompletedtQuiz(isfullScreen: true),
+                    StudentUpcomingQuizSlide(
+                        isfullScreen: true, upcomingQuizData: const []),
+                    const CompletedtQuiz(isfullScreen: true),
                   ],
                 ),
               ),
-         
-         
             ],
           ),
         ),

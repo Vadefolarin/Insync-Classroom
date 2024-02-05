@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:insync/views/student/quizzes/completed_quiz_screen.dart';
+import 'package:insync/views/tutor/quizzes/create_quiz_screen.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+  QuizScreen({super.key, required this.question, required this.quizanswers});
+  List question;
+  List quizanswers;
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -59,7 +62,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    testLenght = questions.length;
+    testLenght = widget.question.length ?? 1;
     return Scaffold(
       backgroundColor: const Color(0xFFF3F3F3),
       appBar: AppBar(
@@ -96,7 +99,7 @@ class _QuizScreenState extends State<QuizScreen> {
               itemCount: testLenght,
               itemBuilder: (BuildContext context, int index) {
                 return QuestionCard(
-                  questions[index],
+                  widget.question[index],
                   totalPages = index.toInt() + 1,
                 );
               },
@@ -168,6 +171,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                   InkWell(
                     onTap: () {
+                      print(widget.quizanswers.length);
                       nextPage();
 
                       // if (isSelected || _throwShotAway) {
@@ -203,7 +207,9 @@ class _QuizScreenState extends State<QuizScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    children: answerOptions.entries.map((e) {
+                    children: widget.quizanswers.asMap().entries.map((e) {
+                          print('e.key ${e.key}---------------------------');
+
                           return ValueListenableBuilder(
                             valueListenable: selectedOption,
                             builder: (BuildContext context, String value, _) {
@@ -214,44 +220,15 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                                 child: CheckboxListTile(
                                   title: Text(e.value),
-                                  value: selectedOption.value == e.key,
+                                  value:
+                                      selectedOption.value == e.key as String,
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      selectedOption.value = e.key;
+                                      selectedOption.value = e.key as String;
                                       isSelected = true;
                                     });
                                   },
                                 ),
-                                //  InkWell(
-                                //   onTap: () {
-                                //     setState(() {
-                                //       selectedOption.value = e.key;
-                                //     });
-                                //   },
-                                //   child: Container(
-                                //     height: 50,
-                                //     width: double.infinity,
-                                //     decoration: BoxDecoration(
-                                //       color: selectedOption.value == e.key
-                                //           ? const Color(0xFF5C2BA8)
-                                //           : const Color(0xFFF3F3F3),
-                                //       borderRadius: BorderRadius.circular(12),
-                                //     ),
-                                //     child: Center(
-                                //       child: Text(
-                                //         e.value,
-                                //         style: TextStyle(
-                                //           color: selectedOption.value == e.key
-                                //               ? Colors.white
-                                //               : const Color(0xFF242424),
-                                //           fontSize: 18,
-                                //           // fontFamily: TRENDA_BOLD,
-                                //           fontWeight: FontWeight.w500,
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
                               );
                             },
                           );
@@ -318,8 +295,8 @@ class _QuizScreenState extends State<QuizScreen> {
     _pageController.animateToPage(_pageController.page!.toInt() + 1,
         duration: const Duration(milliseconds: 400), curve: Curves.easeIn);
     print(_pageController.page!.toInt());
-    print('length ${questions.length}');
-    if (_pageController.page!.toInt() == questions.length - 1) {
+    print('length ${widget.question.length}');
+    if (_pageController.page!.toInt() == widget.question.length - 1) {
       showDialog(
         context: context,
         builder: (context) => const AlertDialog(
@@ -336,21 +313,9 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 }
 
-Map<String, String> answerOptions = {
-  'option1': 'Paris',
-  'option2': 'London',
-  'option3': 'Berlin',
-  'option4': 'Madrid',
-};
-
-List questions = [
-  'What is the capital of France?',
-  "What is  another name for affective computing?",
-  "Platforms like Coursera, Udemy, and EdX have made it possible for people to learn anything, anywhere, at any time. What is the name of this type of learning?",
-  "Performing a task without conscious awareness is called what?",
-  "Machine learning is a subset of what?",
-  "Cloud computing is a type of what?",
-  "What tool is used to measure the success of a website?",
-  "What is the name of the process of converting data into a format that can be understood by a computer?",
-  "SEO stands for what?",
-];
+// Map<String, String> answerOptions = {
+//   'option1': 'Paris',
+//   'option2': 'London',
+//   'option3': 'Berlin',
+//   'option4': 'Madrid',
+// };
