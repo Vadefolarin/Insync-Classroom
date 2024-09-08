@@ -15,7 +15,7 @@ class _QuizFormState extends State<QuizForm> {
   void initState() {
     super.initState();
     // Initialize with 10 quizzes
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
       _quizzes.add(Quiz());
     }
   }
@@ -57,9 +57,23 @@ class _QuizFormState extends State<QuizForm> {
                   child: const Text('Add Another Quiz'),
                 );
               }
-              return QuizInput(
-                quiz: _quizzes[index],
-                key: UniqueKey(),
+              return Dismissible(
+                key: ValueKey(_quizzes[index]),
+                onDismissed: (direction) {
+                  setState(() {
+                    _quizzes.removeAt(index);
+                  });
+                },
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                child: QuizInput(
+                  quiz: _quizzes[index],
+                  key: UniqueKey(),
+                ),
               );
             },
           ),
