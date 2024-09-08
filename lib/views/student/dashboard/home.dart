@@ -215,7 +215,7 @@ class StudentUpcomingQuizSlide extends StatelessWidget {
                         // newQuestion.add(e['questions'].toString());
                         // newQuestion.expand((element) );
 
-                        // print(newQuestion);
+                        print(newQuestion);
 
                         print(newAnswer);
                         Navigator.push(
@@ -229,10 +229,15 @@ class StudentUpcomingQuizSlide extends StatelessWidget {
                           ),
                         );
                       },
-                      child: UpcomingQuizCard(
-                        title: e['title'],
-                        date: e['description'],
-                      ),
+                      child: e['title'] == ''
+                          ? const Text(
+                              'No Upcoming Quiz at the monet',
+                              style: TextStyle(color: Colors.black),
+                            )
+                          : UpcomingQuizCard(
+                              title: e['title'],
+                              date: e['description'],
+                            ),
                     ),
                   )
                   .toList(),

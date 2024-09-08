@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:insync/models/students/student_model.dart';
 import 'package:insync/models/teachers/teacher_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';

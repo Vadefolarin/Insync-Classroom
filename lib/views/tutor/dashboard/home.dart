@@ -177,13 +177,13 @@ class _HomeScreenState extends State<HomeScreen>
                           tabs: const [
                             Tab(
                               iconMargin: EdgeInsets.all(10),
-                              text: 'Group 1',
+                              text: 'Test 1',
                             ),
                             Tab(
-                              text: 'Group 2',
+                              text: 'Test 2',
                             ),
                             Tab(
-                              text: 'Group 3',
+                              text: 'Test 3',
                             ),
                           ],
                         ),
@@ -379,16 +379,16 @@ class MyTable extends StatelessWidget {
           children: [
             TableCell(
               verticalAlignment: TableCellVerticalAlignment.middle,
-              child: Text('Title', style: TextStyle(color: Colors.white)),
+              child:
+                  Text('Course Title', style: TextStyle(color: Colors.white)),
             ),
             TableCell(
               verticalAlignment: TableCellVerticalAlignment.middle,
-              child: Text('Group name', style: TextStyle(color: Colors.white)),
+              child: Text('Course Code', style: TextStyle(color: Colors.white)),
             ),
             TableCell(
               verticalAlignment: TableCellVerticalAlignment.middle,
-              child: Text('No. of persons in group',
-                  style: TextStyle(color: Colors.white)),
+              child: Text('Score', style: TextStyle(color: Colors.white)),
             ),
             TableCell(
               verticalAlignment: TableCellVerticalAlignment.middle,
@@ -407,13 +407,13 @@ class MyTable extends StatelessWidget {
               ),
             ),
             TableCell(
-              child: Text('Group 1'),
+              child: Text(' CSC 307  '),
             ),
             TableCell(
-              child: Text('23 Persons'),
+              child: Text('23'),
             ),
             TableCell(
-              child: Text('12 / 02 / 2023'),
+              child: Text('8-feb-2023'),
             ),
           ],
         ),
@@ -426,13 +426,13 @@ class MyTable extends StatelessWidget {
               child: Text('Python'),
             ),
             TableCell(
-              child: Text('Group 2'),
+              child: Text('CSC 201'),
             ),
             TableCell(
-              child: Text('17 Persons'),
+              child: Text('17'),
             ),
             TableCell(
-              child: Text('12 / 02 / 2023'),
+              child: Text('12-Feb-2023'),
             ),
           ],
         ),
@@ -445,13 +445,13 @@ class MyTable extends StatelessWidget {
               child: Text('C programming'),
             ),
             TableCell(
-              child: Text('Group 3'),
+              child: Text('CSC 401'),
             ),
             TableCell(
-              child: Text('30 Persons'),
+              child: Text('30'),
             ),
             TableCell(
-              child: Text('12 / 02 / 2023'),
+              child: Text('12-feb-2023'),
             ),
           ],
         ),

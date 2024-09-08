@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:insync/views/student/quizzes/completed_quiz_screen.dart';
-import 'package:insync/views/tutor/quizzes/create_quiz_screen.dart';
 
 class QuizScreen extends StatefulWidget {
   QuizScreen({super.key, required this.question, required this.quizanswers});

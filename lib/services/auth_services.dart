@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:insync/models/students/student_model.dart';
 import 'package:insync/models/teachers/teacher_model.dart';
@@ -56,7 +54,7 @@ class AuthService {
           Navigator.pop(context);
         });
       }
-    } on FirebaseAuthException catch (e) {}
+    } on FirebaseAuthException {}
   }
 
   FutureOr<void> signUserUp({
@@ -132,7 +130,7 @@ class AuthService {
       //TODO: Get Device Token 
 
       // await getDeviceToken();
-    } on FirebaseAuthException catch (e) {}
+    } on FirebaseAuthException {}
   }
 
   FutureOr<Teachermodel?> getCurrentTeacherData() async {

@@ -24,7 +24,7 @@ class HeaderText extends StatelessWidget {
       return Text(
         text,
         style: GoogleFonts.mulish(
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 25,
             fontWeight: FontWeight.w600,
           ),

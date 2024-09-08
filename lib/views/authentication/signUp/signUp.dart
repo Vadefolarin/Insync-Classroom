@@ -3,15 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:insync/utils/loader.dart';
 import 'package:insync/utils/colors.dart';
-import 'package:insync/utils/utils.dart';
-import 'package:insync/views/authentication/controllers/auth_controller.dart';
 import 'package:insync/views/authentication/login/login.dart';
 import 'package:insync/views/tutor/mainApp.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../student/quizzes/quiz_screen.dart';
 
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});

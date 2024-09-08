@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:insync/views/authentication/signUp/signUp.dart';
 import 'package:insync/views/tutor/mainApp.dart';
-import 'package:insync/views/tutor/quizzes/create_quiz_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -63,11 +61,11 @@ void navigate(BuildContext context, bool isLogin) {
       // );
       //  return const SignUp();
       return const MainApp(
-        isTutor: false,
+        isTutor: true,
       );
     }));
     // if (isLogin) {
-    //   Navigator.pushNamed(context, '/home');
+    //   Navigator.p  ushNamed(context, '/home');
     // } else {
     //   Navigator.pushNamed(context, '/login');
     // }
