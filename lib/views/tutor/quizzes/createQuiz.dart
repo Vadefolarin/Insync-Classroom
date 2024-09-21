@@ -29,11 +29,30 @@ class _QuizFormState extends State<QuizForm> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
       // Process the quiz data as needed
       for (int i = 0; i < _quizzes.length; i++) {
         print('Quiz ${i + 1}: ${_quizzes[i].question}');
         print('Answers: ${_quizzes[i].answers}');
         print('Correct Answer: ${_quizzes[i].correctAnswer}');
+      }
+
+      // Save the values of the quizzes in an array
+      List<Map<String, dynamic>> quizData = [];
+      for (int i = 0; i < _quizzes.length; i++) {
+        Map<String, dynamic> quiz = {
+          'question': _quizzes[i].question,
+          'answers': _quizzes[i].answers,
+          'correctAnswer': _quizzes[i].correctAnswer,
+        };
+        quizData.add(quiz);
+      }
+
+      // Print the quiz data
+      for (int i = 0; i < quizData.length; i++) {
+        print('Quiz ${i + 1}: ${quizData[i]['question']}');
+        print('Answers: ${quizData[i]['answers']}');
+        print('Correct Answer: ${quizData[i]['correctAnswer']}');
       }
     }
   }
