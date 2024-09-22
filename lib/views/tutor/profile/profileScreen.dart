@@ -30,13 +30,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // _currentUser = UserModel(
-    //   id: '',
-    //   name: '',
-    //   email: '',
-    //   role: '',
-    //   profilePictureUrl: '',
-    // );
+    _currentUser = UserModel(
+      id: '',
+      name: '',
+      email: '',
+      role: '',
+      profilePictureUrl: '',
+    );
     _fetchUserProfile();
   }
 
@@ -66,9 +66,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _isLoading = false;
       });
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Failed to load profile. Please try again.')),
-      // );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load profile. Please try again.')),
+      );
     }
   }
 
@@ -176,8 +176,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: _isLoading
           ? null
           : AppBar(
-              title: Text('Profile'),
+              title: const Text('Profile', style: TextStyle(color: Colors.white)),
               backgroundColor: Colors.blue,
+                      automaticallyImplyLeading: false,
+
               actions: [
                 IconButton(
                   icon: Icon(Icons.logout),

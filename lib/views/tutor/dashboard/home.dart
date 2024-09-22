@@ -115,10 +115,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       // Optional AppBar
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: const Text('Dashboard', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
+      
       body: RefreshIndicator(
         onRefresh: () async {
           // Implement pull-to-refresh functionality here

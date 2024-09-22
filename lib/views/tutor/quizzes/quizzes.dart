@@ -18,8 +18,11 @@ class QuizScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Quizzes'),
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:3538812889.
+        title: const Text('All Quizzes', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
+        leadingWidth: 0,
+        automaticallyImplyLeading: false,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: quizzesStream,

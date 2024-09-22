@@ -112,8 +112,10 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analytics'),
+        title: const Text('Analytics', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
+                automaticallyImplyLeading: false,
+
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
