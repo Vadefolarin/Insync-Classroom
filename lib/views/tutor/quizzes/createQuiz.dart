@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuizForm extends StatefulWidget {
-  const QuizForm({super.key});
+  final String title;
+  final String description;
+
+  const QuizForm({super.key, required this.title, required this.description});
 
   @override
   _QuizFormState createState() => _QuizFormState();
@@ -14,7 +18,7 @@ class _QuizFormState extends State<QuizForm> {
   @override
   void initState() {
     super.initState();
-    // Initialize with 10 quizzes
+    // Initialize with 3 quizzes
     for (int i = 0; i < 3; i++) {
       _quizzes.add(Quiz());
     }
@@ -26,33 +30,47 @@ class _QuizFormState extends State<QuizForm> {
     });
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // Process the quiz data as needed
-      for (int i = 0; i < _quizzes.length; i++) {
-        print('Quiz ${i + 1}: ${_quizzes[i].question}');
-        print('Answers: ${_quizzes[i].answers}');
-        print('Correct Answer: ${_quizzes[i].correctAnswer}');
-      }
-
-      // Save the values of the quizzes in an array
+      // Prepare quiz data for Firestore
       List<Map<String, dynamic>> quizData = [];
-      for (int i = 0; i < _quizzes.length; i++) {
-        Map<String, dynamic> quiz = {
-          'question': _quizzes[i].question,
-          'answers': _quizzes[i].answers,
-          'correctAnswer': _quizzes[i].correctAnswer,
-        };
-        quizData.add(quiz);
+      for (var quiz in _quizzes) {
+        quizData.add({
+          'questionText': quiz.question,
+          'options': quiz.answers,
+          'correctOption': quiz.correctAnswer,
+        });
       }
 
-      // Print the quiz data
-      for (int i = 0; i < quizData.length; i++) {
-        print('Quiz ${i + 1}: ${quizData[i]['question']}');
-        print('Answers: ${quizData[i]['answers']}');
-        print('Correct Answer: ${quizData[i]['correctAnswer']}');
+      // Firestore reference
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Prepare final quiz structure
+      final newQuiz = {
+        'title': widget.title,
+        'description': widget.description,
+        'questions': quizData,
+        'createdBy': 'teacherId', // Replace with actual teacherId
+        'createdAt': FieldValue.serverTimestamp(),
+        'deadline': FieldValue.serverTimestamp(), // Customize as needed
+      };
+
+      try {
+        // Save quiz to Firestore
+        await firestore.collection('quizzes').add(newQuiz);
+
+        // Notify success
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Quiz submitted successfully!')),
+        );
+        Navigator.pop(context);
+      } catch (e) {
+        // Handle error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to submit quiz: $e')),
+        );
       }
     }
   }

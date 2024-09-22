@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class PerformanceMetricsChart extends StatelessWidget {
   final List<BarChartGroupData> data;
 
-  PerformanceMetricsChart({required this.data});
+  const PerformanceMetricsChart({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +32,15 @@ class PerformanceMetricsChart extends StatelessWidget {
           barTouchData: BarTouchData(enabled: true),
           titlesData: FlTitlesData(
             show: true,
-            rightTitles:   AxisTitles(
+            rightTitles:   const AxisTitles(
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:2033011585.
               sideTitles: SideTitles(showTitles: false),
             ),
-            topTitles: AxisTitles(
+            topTitles: const AxisTitles(
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:2033011585.
               sideTitles: SideTitles(showTitles: false),
             ),
-            leftTitles:  AxisTitles(
+            leftTitles:  const AxisTitles(
               sideTitles:     SideTitles(
               showTitles: true,
               interval: 20,
@@ -61,17 +61,17 @@ class PerformanceMetricsChart extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                    switch (value.toInt()) {
                   case 1:
-                    return Text('Quiz 1', style: TextStyle(fontSize: 12, color: Colors.black54),);
+                    return const Text('Quiz 1', style: TextStyle(fontSize: 12, color: Colors.black54),);
                   case 2:
-                    return Text('Quiz 2', style: TextStyle(fontSize: 12, color: Colors.black54),);
+                    return const Text('Quiz 2', style: TextStyle(fontSize: 12, color: Colors.black54),);
                   case 3:
-                    return Text('Quiz 3', style: TextStyle(fontSize: 12, color: Colors.black54),);
+                    return const Text('Quiz 3', style: TextStyle(fontSize: 12, color: Colors.black54),);
                   case 4:
-                    return Text('Quiz 4', style: TextStyle(fontSize: 12, color: Colors.black54),);
+                    return const Text('Quiz 4', style: TextStyle(fontSize: 12, color: Colors.black54),);
                   case 5:
-                    return Text('Quiz 5', style: TextStyle(fontSize: 12, color: Colors.black54),);
+                    return const Text('Quiz 5', style: TextStyle(fontSize: 12, color: Colors.black54),);
                   default:
-                    return Text('');
+                    return const Text('');
                 }
               },
               //getTitles: (double value) {
@@ -105,7 +105,7 @@ class PerformanceMetricsChart extends StatelessWidget {
             show: false,
           ),
           barGroups: data,
-          gridData: FlGridData(show: false),
+          gridData: const FlGridData(show: false),
         ),
       ),
     );

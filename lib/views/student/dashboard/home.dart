@@ -234,7 +234,7 @@ class StudentUpcomingQuizSlide extends StatelessWidget {
                               'No Upcoming Quiz at the monet',
                               style: TextStyle(color: Colors.black),
                             ) :
-                               Center(child: Text('Removed'),),
+                               const Center(child: Text('Removed'),),
                           // : UpcomingQuizCard(
                           //     title: e['title'],
                           //     date: e['description'],

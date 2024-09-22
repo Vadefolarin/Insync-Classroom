@@ -8,6 +8,8 @@ import 'quiz_detail.dart';
 import 'widgets/quiz_list_item.dart';
 
 class QuizScreen extends StatelessWidget {
+  const QuizScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Fetch quizzes ordered by deadline descending
@@ -28,11 +30,11 @@ class QuizScreen extends StatelessWidget {
         stream: quizzesStream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Error fetching quizzes.'));
+            return const Center(child: Text('Error fetching quizzes.'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           // Parse quizzes
@@ -52,8 +54,8 @@ class QuizScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Upcoming Quizzes
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
                   child: Text(
                     'Upcoming Quizzes',
                     style: TextStyle(
@@ -63,12 +65,12 @@ class QuizScreen extends StatelessWidget {
                   ),
                 ),
                 upcomingQuizzes.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    ? const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text('No upcoming quizzes.'),
                       )
                     : ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: upcomingQuizzes.length,
                         itemBuilder: (context, index) {
@@ -87,10 +89,10 @@ class QuizScreen extends StatelessWidget {
                           );
                         },
                       ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 // Past Quizzes
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
                   child: Text(
                     'Past Quizzes',
                     style: TextStyle(
@@ -100,12 +102,12 @@ class QuizScreen extends StatelessWidget {
                   ),
                 ),
                 pastQuizzes.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    ? const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text('No past quizzes.'),
                       )
                     : ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: pastQuizzes.length,
                         itemBuilder: (context, index) {
@@ -124,7 +126,7 @@ class QuizScreen extends StatelessWidget {
                           );
                         },
                       ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
               ],
             ),
           );

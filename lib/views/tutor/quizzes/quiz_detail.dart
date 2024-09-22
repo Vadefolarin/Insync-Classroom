@@ -8,7 +8,7 @@ import '../../../models/quiz_model.dart';
 class QuizDetailsScreen extends StatelessWidget {
   final Quiz quiz;
 
-  QuizDetailsScreen({required this.quiz});
+  const QuizDetailsScreen({super.key, required this.quiz});
 
   @override
   Widget build(BuildContext context) {
@@ -18,42 +18,42 @@ class QuizDetailsScreen extends StatelessWidget {
         backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Quiz Description
-            Text(
+            const Text(
               'Description',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               quiz.description,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Quiz Deadline
-            Text(
+            const Text(
               'Deadline',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               DateFormat.yMMMd().add_jm().format(quiz.deadline),
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Questions
-            Text(
+            const Text(
               'Questions',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: quiz.questions.length,
               itemBuilder: (context, index) {
@@ -64,17 +64,17 @@ class QuizDetailsScreen extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             // Created At
-            Text(
+            const Text(
               'Created At',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               DateFormat.yMMMd().add_jm().format(quiz.createdAt),
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),
@@ -87,30 +87,30 @@ class QuestionCard extends StatelessWidget {
   final Question question;
   final int questionNumber;
 
-  QuestionCard({required this.question, required this.questionNumber});
+  const QuestionCard({super.key, required this.question, required this.questionNumber});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Question Text
             Text(
               'Q$questionNumber: ${question.questionText}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             // Options
             Column(
               children: question.options.map((option) {

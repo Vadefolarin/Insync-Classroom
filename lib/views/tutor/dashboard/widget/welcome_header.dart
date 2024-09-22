@@ -6,7 +6,7 @@ class WelcomeHeader extends StatelessWidget {
   final String teacherName;
   final String profileImageUrl;
 
-  WelcomeHeader({required this.teacherName, required this.profileImageUrl});
+  const WelcomeHeader({super.key, required this.teacherName, required this.profileImageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class WelcomeHeader extends StatelessWidget {
           children: [
             Text(
               'Welcome, $teacherName!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             Text(
               '${DateTime.now().toLocal()}'.split(' ')[0], // Current date

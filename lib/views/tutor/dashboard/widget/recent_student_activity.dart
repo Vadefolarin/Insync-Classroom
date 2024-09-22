@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class RecentActivitiesList extends StatelessWidget {
   final List<Activity> activities;
 
-  RecentActivitiesList({required this.activities});
+  const RecentActivitiesList({super.key, required this.activities});
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +19,12 @@ class RecentActivitiesList extends StatelessWidget {
           ),
           title: Text(
             '${activity.studentName} submitted ${activity.quizTitle}',
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           subtitle: Text(
             DateFormat.yMMMd().add_jm().format(activity.submissionTime),
           ),
-          trailing: Icon(Icons.arrow_forward_ios),
+          trailing: const Icon(Icons.arrow_forward_ios),
           onTap: () {
             // Navigate to Submission Details
           },

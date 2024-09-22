@@ -11,6 +11,8 @@ import 'participant_rate.dart';
 
 
 class AnalyticScreen extends StatefulWidget {
+  const AnalyticScreen({super.key});
+
   @override
   _AnalyticScreenState createState() => _AnalyticScreenState();
 }
@@ -57,9 +59,9 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
 
       // Calculate overall average score
       double totalScore = 0.0;
-      responses.forEach((response) {
+      for (var response in responses) {
         totalScore += response.score;
-      });
+      }
       double overallAverage =
           responses.isNotEmpty ? totalScore / responses.length : 0.0;
 
@@ -82,7 +84,7 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
   // Calculate average score per quiz
   Map<String, double> get averageScoresPerQuiz {
     Map<String, double> avgScores = {};
-    _quizzes.forEach((quiz) {
+    for (var quiz in _quizzes) {
       List<ResponseModel> quizResponses =
           _responses.where((resp) => resp.quizId == quiz.id).toList();
       if (quizResponses.isNotEmpty) {
@@ -92,19 +94,19 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
       } else {
         avgScores[quiz.title] = 0.0;
       }
-    });
+    }
     return avgScores;
   }
 
   // Calculate participation rate per quiz
   Map<String, double> get participationRatePerQuiz {
     Map<String, double> participation = {};
-    _quizzes.forEach((quiz) {
+    for (var quiz in _quizzes) {
       int responsesCount =
           _responses.where((resp) => resp.quizId == quiz.id).length;
       double rate = _totalStudents > 0 ? (responsesCount / _totalStudents) * 100 : 0.0;
       participation[quiz.title] = rate;
-    });
+    }
     return participation;
   }
 
@@ -118,11 +120,11 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
 
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : _quizzes.isEmpty
-              ? Center(child: Text('No quizzes available for analytics.'))
+              ? const Center(child: Text('No quizzes available for analytics.'))
               : SingleChildScrollView(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -130,35 +132,35 @@ class _AnalyticScreenState extends State<AnalyticScreen> {
                       OverallPerformanceCard(
                         averageScore: _overallAverageScore,
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
                       // Average Score per Quiz
-                      Text(
+                      const Text(
                         'Average Score per Quiz',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       AverageScoreChart(
                         dataMap: averageScoresPerQuiz,
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
                       // Participation Rate per Quiz
-                      Text(
+                      const Text(
                         'Participation Rate per Quiz (%)',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       ParticipationRateChart(
                         dataMap: participationRatePerQuiz,
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
                       // Additional analytics can be added here
                     ],

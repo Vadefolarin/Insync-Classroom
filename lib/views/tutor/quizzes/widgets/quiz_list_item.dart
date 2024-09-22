@@ -10,7 +10,7 @@ class QuizListItem extends StatelessWidget {
   final Quiz quiz;
   final VoidCallback onTap;
 
-  QuizListItem({required this.quiz, required this.onTap});
+  const QuizListItem({super.key, required this.quiz, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class QuizListItem extends StatelessWidget {
     bool isUpcoming = quiz.deadline.isAfter(now);
 
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -31,7 +31,7 @@ class QuizListItem extends StatelessWidget {
         ),
         title: Text(
           quiz.title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -44,7 +44,7 @@ class QuizListItem extends StatelessWidget {
         ),
         trailing: isUpcoming
             ? CountdownTimer(endTime: quiz.deadline)
-            : Icon(Icons.check_circle, color: Colors.green),
+            : const Icon(Icons.check_circle, color: Colors.green),
         onTap: onTap,
       ),
     );
@@ -56,7 +56,7 @@ class QuizListItem extends StatelessWidget {
 class CountdownTimer extends StatefulWidget {
   final DateTime endTime;
 
-  CountdownTimer({required this.endTime});
+  const CountdownTimer({super.key, required this.endTime});
 
   @override
   _CountdownTimerState createState() => _CountdownTimerState();
@@ -70,7 +70,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
   void initState() {
     super.initState();
     remaining = widget.endTime.difference(DateTime.now());
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         remaining = widget.endTime.difference(DateTime.now());
         if (remaining.isNegative) {

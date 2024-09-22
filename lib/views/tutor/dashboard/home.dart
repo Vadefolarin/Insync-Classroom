@@ -19,23 +19,23 @@ class HomeScreen extends StatelessWidget {
       "https://www.w3schools.com/howto/img_avatar.png"; // Placeholder image
 
   final List<Quiz> upcomingQuizzes = [
-    Quiz(title: "Math Quiz 1", deadline: DateTime.now().add(Duration(days: 2))),
-    Quiz(title: "Science Quiz 2", deadline: DateTime.now().add(Duration(days: 5))),
-    Quiz(title: "History Quiz 3", deadline: DateTime.now().add(Duration(days: 7))),
+    Quiz(title: "Math Quiz 1", deadline: DateTime.now().add(const Duration(days: 2))),
+    Quiz(title: "Science Quiz 2", deadline: DateTime.now().add(const Duration(days: 5))),
+    Quiz(title: "History Quiz 3", deadline: DateTime.now().add(const Duration(days: 7))),
   ];
 
   final List<Activity> recentActivities = [
     Activity(
       studentName: "John Doe",
       quizTitle: "Math Quiz 1",
-      submissionTime: DateTime.now().subtract(Duration(hours: 2)),
+      submissionTime: DateTime.now().subtract(const Duration(hours: 2)),
       studentAvatar:
           "https://www.w3schools.com/howto/img_avatar.png", // Placeholder avatar
     ),
     Activity(
       studentName: "Jane Smith",
       quizTitle: "Science Quiz 2",
-      submissionTime: DateTime.now().subtract(Duration(hours: 5)),
+      submissionTime: DateTime.now().subtract(const Duration(hours: 5)),
       studentAvatar:
           "https://www.w3schools.com/howto/img_avatar2.png", // Placeholder avatar
     ),
@@ -45,11 +45,11 @@ class HomeScreen extends StatelessWidget {
   final List<NotificationItem> notifications = [
     NotificationItem(
       message: "New student John Doe joined the class.",
-      time: DateTime.now().subtract(Duration(minutes: 30)),
+      time: DateTime.now().subtract(const Duration(minutes: 30)),
     ),
     NotificationItem(
       message: "Math Quiz 1 is due in 2 days.",
-      time: DateTime.now().subtract(Duration(hours: 1)),
+      time: DateTime.now().subtract(const Duration(hours: 1)),
     ),
     // Add more notifications as needed
   ];
@@ -110,6 +110,7 @@ class HomeScreen extends StatelessWidget {
     // ]),
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,11 +126,11 @@ class HomeScreen extends StatelessWidget {
         onRefresh: () async {
           // Implement pull-to-refresh functionality here
           // For now, we just wait for a second
-          await Future.delayed(Duration(seconds: 1));
+          await Future.delayed(const Duration(seconds: 1));
         },
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
-          physics: AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16.0),
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -138,35 +139,35 @@ class HomeScreen extends StatelessWidget {
                 teacherName: teacherName,
                 profileImageUrl: profileImageUrl,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               // Quick Actions
               QuickActions(),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Upcoming Deadlines
               SectionTitle(title: "Upcoming Deadlines"),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               UpcomingDeadlinesList(quizzes: upcomingQuizzes),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Recent Student Activity
               SectionTitle(title: "Recent Student Activity"),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               RecentActivitiesList(activities: recentActivities),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Performance Metrics
               SectionTitle(title: "Performance Metrics"),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               PerformanceMetricsChart(data: performanceData),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // Notifications
               SectionTitle(title: "Notifications"),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               NotificationsList(notifications: notifications),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
             ],
           ),
         ),

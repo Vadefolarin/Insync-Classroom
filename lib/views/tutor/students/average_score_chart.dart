@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class AverageScoreChart extends StatelessWidget {
   final Map<String, double> dataMap;
 
-  AverageScoreChart({required this.dataMap});
+  const AverageScoreChart({super.key, required this.dataMap});
 
   @override
   Widget build(BuildContext context) {
     if (dataMap.isEmpty) {
-      return Center(child: Text('No data available.'));
+      return const Center(child: Text('No data available.'));
     }
 
     List<BarChartGroupData> barGroups = [];
@@ -35,7 +35,7 @@ class AverageScoreChart extends StatelessWidget {
 
     return Container(
       height: 300,
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
@@ -44,7 +44,7 @@ class AverageScoreChart extends StatelessWidget {
           titlesData: FlTitlesData(
             show: true,
             leftTitles: 
-            AxisTitles(
+            const AxisTitles(
               sideTitles:    SideTitles(
               showTitles: true,
               interval: 20,
@@ -62,11 +62,11 @@ class AverageScoreChart extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                   int idx = value.toInt();
                 if (idx >= 0 && idx < dataMap.keys.length) {
-                  return Text('${dataMap.keys.elementAt(idx).length > 10
+                  return Text(dataMap.keys.elementAt(idx).length > 10
                       ? '${dataMap.keys.elementAt(idx).substring(0, 10)}...'
-                      : dataMap.keys.elementAt(idx)}');
+                      : dataMap.keys.elementAt(idx));
                 }
-                return Text('Nothing');
+                return const Text('Nothing');
               },
               
               // getTitles: (double value) {
@@ -91,7 +91,7 @@ class AverageScoreChart extends StatelessWidget {
             show: false,
           ),
           barGroups: barGroups,
-          gridData: FlGridData(show: true),
+          gridData: const FlGridData(show: true),
         ),
       ),
     );

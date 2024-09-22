@@ -14,6 +14,8 @@ import '../../../models/user_model.dart';
 import 'profile_form.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -58,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _isLoading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User profile not found.')),
+          const SnackBar(content: Text('User profile not found.')),
         );
       }
     } catch (e) {
@@ -67,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load profile. Please try again.')),
+        const SnackBar(content: Text('Failed to load profile. Please try again.')),
       );
     }
   }
@@ -106,12 +108,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _fetchUserProfile();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Profile updated successfully.')),
+        const SnackBar(content: Text('Profile updated successfully.')),
       );
     } catch (e) {
       print('Error updating profile: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update profile. Please try again.')),
+        const SnackBar(content: Text('Failed to update profile. Please try again.')),
       );
     } finally {
       setState(() {
@@ -141,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await user.updatePassword(newPassword);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password updated successfully.')),
+        const SnackBar(content: Text('Password updated successfully.')),
       );
     } on FirebaseAuthException catch (e) {
       print('Error changing password: $e');
@@ -155,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print('Error changing password: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to change password. Please try again.')),
+        const SnackBar(content: Text('Failed to change password. Please try again.')),
       );
     } finally {
       setState(() {
@@ -182,16 +184,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               actions: [
                 IconButton(
-                  icon: Icon(Icons.logout),
+                  icon: const Icon(Icons.logout),
                   onPressed: _signOut,
                   tooltip: 'Sign Out',
                 ),
               ],
             ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
                   // Profile Picture
@@ -236,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Profile Form
                   ProfileForm(
@@ -245,28 +247,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _updateProfile(updatedUser, newImage);
                     },
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Change Password Section
                   ElevatedButton(
                     onPressed: () {
                       _showChangePasswordDialog();
                     },
-                    child: Text('Change Password'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
-                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       textStyle:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
+                    child: Text('Change Password'),
                   ),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
                   // Update Loading Indicator
                   _isUpdating
-                      ? CircularProgressIndicator()
-                      : SizedBox.shrink(),
+                      ? const CircularProgressIndicator()
+                      : const SizedBox.shrink(),
                 ],
               ),
             ),
@@ -283,14 +285,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Change Password"),
+          title: const Text("Change Password"),
           content: SingleChildScrollView(
             child: Column(
               children: [
                 // Current Password
                 TextField(
                   obscureText: true,
-                  decoration: InputDecoration(labelText: "Current Password"),
+                  decoration: const InputDecoration(labelText: "Current Password"),
                   onChanged: (value) {
                     currentPassword = value;
                   },
@@ -298,7 +300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // New Password
                 TextField(
                   obscureText: true,
-                  decoration: InputDecoration(labelText: "New Password"),
+                  decoration: const InputDecoration(labelText: "New Password"),
                   onChanged: (value) {
                     newPassword = value;
                   },
@@ -306,7 +308,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // Confirm Password
                 TextField(
                   obscureText: true,
-                  decoration: InputDecoration(labelText: "Confirm New Password"),
+                  decoration: const InputDecoration(labelText: "Confirm New Password"),
                   onChanged: (value) {
                     confirmPassword = value;
                   },
@@ -316,17 +318,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton(
-              child: Text("Change"),
+              child: const Text("Change"),
               onPressed: () {
                 if (newPassword != confirmPassword) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Passwords do not match.')),
+                    const SnackBar(content: Text('Passwords do not match.')),
                   );
                   return;
                 }

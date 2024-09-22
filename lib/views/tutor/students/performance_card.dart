@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class OverallPerformanceCard extends StatelessWidget {
   final double averageScore;
 
-  OverallPerformanceCard({required this.averageScore});
+  const OverallPerformanceCard({super.key, required this.averageScore});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class OverallPerformanceCard extends StatelessWidget {
                 color: Colors.blue[800],
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               averageScore.toStringAsFixed(2),
               style: TextStyle(
@@ -37,7 +37,7 @@ class OverallPerformanceCard extends StatelessWidget {
                 color: Colors.blue[900],
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               'Average Score',
               style: TextStyle(

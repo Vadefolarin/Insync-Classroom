@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 class UpcomingDeadlinesList extends StatelessWidget {
   final List<Quiz> quizzes;
 
-  UpcomingDeadlinesList({required this.quizzes});
+  const UpcomingDeadlinesList({super.key, required this.quizzes});
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +17,12 @@ class UpcomingDeadlinesList extends StatelessWidget {
       children: quizzes.map((quiz) {
         return Card(
           elevation: 2,
-          margin: EdgeInsets.symmetric(vertical: 6),
+          margin: const EdgeInsets.symmetric(vertical: 6),
           child: ListTile(
-            leading: Icon(Icons.assignment, color: Colors.blue),
+            leading: const Icon(Icons.assignment, color: Colors.blue),
             title: Text(
               quiz.title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             subtitle: Text(
               'Due: ${DateFormat.yMMMd().add_jm().format(quiz.deadline)}',
@@ -43,7 +43,7 @@ class UpcomingDeadlinesList extends StatelessWidget {
 class CountdownTimer extends StatefulWidget {
   final DateTime endTime;
 
-  CountdownTimer({required this.endTime});
+  const CountdownTimer({super.key, required this.endTime});
 
   @override
   _CountdownTimerState createState() => _CountdownTimerState();
@@ -57,7 +57,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
   void initState() {
     super.initState();
     remaining = widget.endTime.difference(DateTime.now());
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         remaining = widget.endTime.difference(DateTime.now());
         if (remaining.isNegative) {

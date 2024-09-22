@@ -33,7 +33,7 @@ class StudentQuizzes extends ConsumerWidget {
                   children: [
                     StudentUpcomingQuizSlide(
                         isfullScreen: true, upcomingQuizData: const []),
-                           Center(child: Text('Removed'),),
+                           const Center(child: Text('Removed'),),
                     // const CompletedtQuiz(isfullScreen: true),
                   ],
                 ),

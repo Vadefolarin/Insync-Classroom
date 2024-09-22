@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class ParticipationRateChart extends StatelessWidget {
   final Map<String, double> dataMap;
 
-  ParticipationRateChart({required this.dataMap});
+  const ParticipationRateChart({super.key, required this.dataMap});
 
   @override
   Widget build(BuildContext context) {
     if (dataMap.isEmpty) {
-      return Center(child: Text('No data available.'));
+      return const Center(child: Text('No data available.'));
     }
 
     List<BarChartGroupData> barGroups = [];
@@ -35,7 +35,7 @@ class ParticipationRateChart extends StatelessWidget {
 
     return Container(
       height: 300,
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
@@ -43,7 +43,7 @@ class ParticipationRateChart extends StatelessWidget {
           barTouchData: BarTouchData(enabled: true),
           titlesData: FlTitlesData(
             show: true,
-            leftTitles: AxisTitles(
+            leftTitles: const AxisTitles(
               sideTitles: SideTitles(
               showTitles: true,
               interval: 20,
@@ -58,11 +58,11 @@ class ParticipationRateChart extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 int idx = value.toInt();
                 if (idx >= 0 && idx < dataMap.keys.length) {
-                  return Text('${dataMap.keys.elementAt(idx).length > 10
+                  return Text(dataMap.keys.elementAt(idx).length > 10
                       ? '${dataMap.keys.elementAt(idx).substring(0, 10)}...'
-                      : dataMap.keys.elementAt(idx)}');
+                      : dataMap.keys.elementAt(idx));
                 }
-                return Text('');
+                return const Text('');
               },
               // getTitles: (double value) {
               //   int idx = value.toInt();
@@ -85,7 +85,7 @@ class ParticipationRateChart extends StatelessWidget {
             show: false,
           ),
           barGroups: barGroups,
-          gridData: FlGridData(show: true),
+          gridData: const FlGridData(show: true),
         ),
       ),
     );

@@ -10,7 +10,7 @@ class ProfileForm extends StatefulWidget {
   final UserModel user;
   final Function(UserModel updatedUser, File? newImage) onSave;
 
-  ProfileForm({required this.user, required this.onSave});
+  const ProfileForm({super.key, required this.user, required this.onSave});
 
   @override
   _ProfileFormState createState() => _ProfileFormState();
@@ -45,7 +45,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
     if (name.isEmpty || email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Name and email cannot be empty.')),
+        const SnackBar(content: Text('Name and email cannot be empty.')),
       );
       return;
     }
@@ -68,41 +68,41 @@ class _ProfileFormState extends State<ProfileForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Profile Information',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         // Name Field
         TextField(
           controller: _nameController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Name',
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.person),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         // Email Field
         TextField(
           controller: _emailController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Email',
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.email),
           ),
           keyboardType: TextInputType.emailAddress,
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         // Save Button
         ElevatedButton(
           onPressed: _submit,
-          child: Text('Save Changes'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
+          child: Text('Save Changes'),
         ),
       ],
     );
