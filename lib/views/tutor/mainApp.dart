@@ -6,7 +6,7 @@ import 'package:insync/views/student/quizzes/quizzes.dart';
 import 'package:insync/views/student/results/results.dart';
 import 'package:insync/views/tutor/dashboard/home.dart';
 import 'package:insync/views/tutor/quizzes/quizzes.dart';
-import 'package:insync/views/tutor/results/results.dart';
+import 'package:insync/views/tutor/profile/profileScreen.dart';
 import 'package:insync/views/tutor/students/students.dart';
 
 class MainApp extends StatefulWidget {
@@ -70,25 +70,25 @@ class _MainAppState extends State<MainApp> {
                         'assets/icons/students.svg',
                         // color: value == 1 ? kColorMainPrimary : kColorMediumGray,
                       ),
-                      label: 'Students',
+                      label: 'Analytics',
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
                         'assets/icons/results.svg',
                         // color: value == 2 ? kColorMainPrimary : kColorMediumGray,
                       ),
-                      label: 'Results',
+                      label: 'Profile',
                     ),
                   ],
                 ),
                 body: value == 0
-                    ? const HomeScreen()
+                    ?  HomeScreen()
                     : value == 1
-                        ? const QuizScreen()
+                        ?  QuizScreen()
                         : value == 2
-                            ? const StudentsScreen()
+                            ?  AnalyticScreen()
                             : value == 3
-                                ? const ResultsScreen()
+                                ?  ProfileScreen()
                                 : Container(),
               )
             // for students

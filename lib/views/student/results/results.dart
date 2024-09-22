@@ -18,7 +18,7 @@ class StudentResultsScreen extends StatelessWidget {
         child: DataTable(
             columnSpacing: 10,
             headingRowColor:
-                MaterialStateProperty.resolveWith((states) => Colors.black),
+                WidgetStateProperty.resolveWith((states) => Colors.black),
             horizontalMargin: 10,
             border: const TableBorder(
               borderRadius: BorderRadius.only(

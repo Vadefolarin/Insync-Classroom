@@ -105,9 +105,9 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                   upcomingQuizData: upComingQuizdata,
                 ),
                 const SizedBox(height: 20),
-                const CompletedtQuiz(
-                  isfullScreen: false,
-                ),
+                // const CompletedtQuiz(
+                //   isfullScreen: false,
+                // ),
                 const SizedBox(height: 20),
               ],
             ),
@@ -233,11 +233,12 @@ class StudentUpcomingQuizSlide extends StatelessWidget {
                           ? const Text(
                               'No Upcoming Quiz at the monet',
                               style: TextStyle(color: Colors.black),
-                            )
-                          : UpcomingQuizCard(
-                              title: e['title'],
-                              date: e['description'],
-                            ),
+                            ) :
+                               Center(child: Text('Removed'),),
+                          // : UpcomingQuizCard(
+                          //     title: e['title'],
+                          //     date: e['description'],
+                          //   ),
                     ),
                   )
                   .toList(),
