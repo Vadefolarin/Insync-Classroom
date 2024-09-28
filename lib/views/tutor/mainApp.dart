@@ -84,11 +84,11 @@ class _MainAppState extends State<MainApp> {
                 body: value == 0
                     ?  HomeScreen()
                     : value == 1
-                        ?  QuizScreen()
+                        ?  const QuizScreen()
                         : value == 2
-                            ?  AnalyticScreen()
+                            ?  const AnalyticScreen()
                             : value == 3
-                                ?  ProfileScreen()
+                                ?  const ProfileScreen()
                                 : Container(),
               )
             // for students

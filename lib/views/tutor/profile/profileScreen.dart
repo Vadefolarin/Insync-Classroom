@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       textStyle:
                           const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    child: Text('Change Password'),
+                    child: const Text('Change Password'),
                   ),
 
                   const SizedBox(height: 24),

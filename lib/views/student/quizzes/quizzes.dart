@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:insync/views/student/dashboard/home.dart';
-import 'package:insync/views/tutor/dashboard/home.dart';
 
 class StudentQuizzes extends ConsumerWidget {
   const StudentQuizzes({Key? key}) : super(key: key);

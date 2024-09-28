@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:insync/views/tutor/quizzes/create_quiz_screen.dart';
 
 import 'createQuiz.dart';
 

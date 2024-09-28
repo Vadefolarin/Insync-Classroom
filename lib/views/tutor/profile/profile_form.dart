@@ -102,7 +102,7 @@ class _ProfileFormState extends State<ProfileForm> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          child: Text('Save Changes'),
+          child: const Text('Save Changes'),
         ),
       ],
     );

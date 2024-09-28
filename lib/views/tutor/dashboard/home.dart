@@ -110,6 +110,8 @@ class HomeScreen extends StatelessWidget {
     // ]),
   ];
 
+  const HomeScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,29 +144,29 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // Quick Actions
-              QuickActions(),
+              const QuickActions(),
               const SizedBox(height: 24),
 
               // Upcoming Deadlines
-              SectionTitle(title: "Upcoming Deadlines"),
+              const SectionTitle(title: "Upcoming Deadlines"),
               const SizedBox(height: 8),
               UpcomingDeadlinesList(quizzes: upcomingQuizzes),
               const SizedBox(height: 24),
 
               // Recent Student Activity
-              SectionTitle(title: "Recent Student Activity"),
+              const SectionTitle(title: "Recent Student Activity"),
               const SizedBox(height: 8),
               RecentActivitiesList(activities: recentActivities),
               const SizedBox(height: 24),
 
               // Performance Metrics
-              SectionTitle(title: "Performance Metrics"),
+              const SectionTitle(title: "Performance Metrics"),
               const SizedBox(height: 8),
               PerformanceMetricsChart(data: performanceData),
               const SizedBox(height: 24),
 
               // Notifications
-              SectionTitle(title: "Notifications"),
+              const SectionTitle(title: "Notifications"),
               const SizedBox(height: 8),
               NotificationsList(notifications: notifications),
               const SizedBox(height: 24),
