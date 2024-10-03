@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:insync/views/authentication/login/login.dart';
 import 'package:insync/views/tutor/mainApp.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    navigate(context, true);
+    navigate(context, false);
 
     return Scaffold(
       body: Container(
@@ -55,19 +56,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
 void navigate(BuildContext context, bool isLogin) {
   Future.delayed(const Duration(seconds: 4)).then((value) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      // return const CreateQuizScreen(
-      //   title: 'Create Quiz',
-      // );
-      //  return const SignUp();
-      return const MainApp(
-        isTutor: true,
-      );
-    }));
-    // if (isLogin) {
-    //   Navigator.p  ushNamed(context, '/home');
-    // } else {
-    //   Navigator.pushNamed(context, '/login');
-    // }
+    // Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //   // return const CreateQuizScreen(
+    //   //   title: 'Create Quiz',
+    //   // );
+    //   //  return const SignUp();
+    //   // return const MainApp(
+    //   //   isTutor: true,
+    //   // );
+    // }));
+    if (isLogin) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return const MainApp(
+          isTutor: true,
+        );
+      }));
+      // Navigator.pushNamed(context, '/home');
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return const Login();
+      }));
+    }
   });
 }
