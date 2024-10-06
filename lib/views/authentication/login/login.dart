@@ -1,12 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:insync/utils/colors.dart';
-import 'package:insync/utils/loader.dart';
 import 'package:insync/utils/utils.dart';
 import 'package:insync/views/authentication/controllers/auth_controller.dart';
 import 'package:insync/views/authentication/signUp/signUp.dart';
 import 'package:insync/views/tutor/mainApp.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends ConsumerStatefulWidget {
@@ -39,39 +40,65 @@ class _LoginState extends ConsumerState<Login> {
   }
 
   // sign user in method
-  void signUserIn(bool isTutor) async {
+  void signUserIn() async {
     if (_formKey.currentState!.validate()) {
       showDialog(
         context: context,
         builder: (context) {
-          return const Center(
+          return Center(
             child: Loader(),
           );
         },
       );
       try {
+        // Sign-in successful, navigate to home screen
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        print("Email: ${prefs.getBool('isTutor').toString()}");
+
+        bool isTutor = prefs.getBool('isTutor') ?? false;
         await ref.read(authControllerProvider).signInWithEmailAndPassword(
               email: emailController.text,
               password: passwordcontroller.text,
               context: context,
-              //TODO: add a value notifier to listen if its tutuor or not
-
-              isTutor: isTutor,
+              isTutor: isTutor ? true : false,
             );
-        // print(
-        //     'XXXXXXXXXXXXXXXXXXXXXXXXXXxx${widget.email} XXXXXXXXXXXXXXXXX ${passwordController.text}');
-        // Navigator.pop(context);
+
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const MainApp(
               isTutor: true,
             ),
           ),
-          (route) => false,
+          (route) => isTutor ? true : false,
         );
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setBool('isLoggedIn', true);
-      } catch (e) {
+        prefs.setBool('isLoggedIn', isTutor);
+      }
+      
+       on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('Errorrrrrrrrrrrrr: $e');
+        if (e.code.contains('The supplied auth credential is incorrect')) {
+          toast('Incorect credentials');
+          context.pop();
+        } else if (e.code == "network-request-failed") {
+          toast(
+              "Network request failed. Please check your internet connection.");
+          context.pop();
+        } else if (e.code == "user-not-found") {
+          toast("User not found !");
+        } else if (e.code == "wrong-password") {
+          toast("password is not correct !");
+          context.pop();
+        } else if (e.code == "INVALID_LOGIN_CREDENTIALS") {
+          toast("invalid credentiels");
+          context.pop();
+        } else {
+          toast("An error occurred. Please try again later.");
+          context.pop();
+        }
+      }
+    } 
+       catch (e) {
         Navigator.pop(context);
         if (e.toString().contains('too many requests, try again later')) {
           showSnackBar(
@@ -298,7 +325,7 @@ class _LoginState extends ConsumerState<Login> {
                       const SizedBox(height: 25),
                       InkWell(
                         onTap: () {
-                          signUserIn(!value ? true : false);
+                          signUserIn();
                           // Navigator.of(context).pushAndRemoveUntil(
                           //   MaterialPageRoute(
                           //     builder: (context) => const MainApp(
