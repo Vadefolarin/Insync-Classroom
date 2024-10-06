@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:insync/views/student/quizzes/join_quiz.dart';
 import 'package:insync/views/student/quizzes/quiz_screen.dart';
 import 'package:insync/views/tutor/dashboard/home.dart';
+
+import '../../onboarding/continue_as.dart';
 
 class StudentHomeScreen extends StatefulWidget {
   const StudentHomeScreen({super.key});
@@ -25,32 +28,32 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   Widget build(BuildContext context) {
     getQuestions();
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xFFFFEDDF),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => const AlertDialog(
-              content: JoinQuiz(),
-            ),
-          );
-        },
-        label: const Row(
-          children: [
-            Icon(
-              Icons.add_alarm,
-              color: Color(0xFF0D1321),
-            ),
-            SizedBox(width: 5),
-            Text(
-              'Join Quiz',
-              style: TextStyle(
-                color: Color(0xFF0D1321),
-              ),
-            ),
-          ],
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   backgroundColor: const Color(0xFFFFEDDF),
+      //   onPressed: () {
+      //     showDialog(
+      //       context: context,
+      //       builder: (context) => const AlertDialog(
+      //         content: JoinQuiz(),
+      //       ),
+      //     );
+      //   },
+      //   label: const Row(
+      //     children: [
+      //       Icon(
+      //         Icons.add_alarm,
+      //         color: Color(0xFF0D1321),
+      //       ),
+      //       SizedBox(width: 5),
+      //       Text(
+      //         'Join Quiz',
+      //         style: TextStyle(
+      //           color: Color(0xFF0D1321),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -80,7 +83,46 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                               ))
                         ]),
                     const Spacer(),
-                    SvgPicture.asset('assets/icons/message.svg'),
+                    IconButton(
+                      icon: const Icon(Icons.logout, color: Colors.deepPurple),
+                      onPressed: () {
+                        print('User logged out');
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Log Out'),
+                              content: const Text(
+                                  'Are you sure you want to log out?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await FirebaseAuth.instance.signOut();
+                                    Navigator.of(context).pop();
+                                    Navigator.pushReplacement(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return const ContinueAsWidget();
+                                    }));
+                                  },
+                                  child: const Text('Log Out',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
                     const SizedBox(width: 10),
                     Stack(
                       children: [
@@ -233,12 +275,14 @@ class StudentUpcomingQuizSlide extends StatelessWidget {
                           ? const Text(
                               'No Upcoming Quiz at the monet',
                               style: TextStyle(color: Colors.black),
-                            ) :
-                               const Center(child: Text('Removed'),),
-                          // : UpcomingQuizCard(
-                          //     title: e['title'],
-                          //     date: e['description'],
-                          //   ),
+                            )
+                          : const Center(
+                              child: Text('Removed'),
+                            ),
+                      // : UpcomingQuizCard(
+                      //     title: e['title'],
+                      //     date: e['description'],
+                      //   ),
                     ),
                   )
                   .toList(),

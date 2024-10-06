@@ -6,8 +6,6 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../widgets/button_widgets.dart';
 import '../authentication/login/login.dart';
 
-
-
 bool isTutor = false;
 
 class ContinueAsWidget extends StatefulWidget {
@@ -31,6 +29,7 @@ class _ContinueAsWidgetState extends State<ContinueAsWidget> {
             borderRadius: BorderRadius.circular(8.0),
             color: Colors.white,
           ),
+          margin: const EdgeInsets.symmetric(vertical: 40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -91,10 +90,8 @@ class _ContinueAsWidgetState extends State<ContinueAsWidget> {
                 width: 200,
                 onTap: () {
                   if (_selectedRole.isNotEmpty) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Login()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Login()));
                     // Navigator.pushNamed(context, 'login');
                   }
                 },

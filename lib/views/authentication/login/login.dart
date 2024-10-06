@@ -71,34 +71,30 @@ class _LoginState extends ConsumerState<Login> {
           ),
           (route) => isTutor ? true : false,
         );
-        prefs.setBool('isLoggedIn', isTutor);
-      }
-      
-       on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('Errorrrrrrrrrrrrr: $e');
-        if (e.code.contains('The supplied auth credential is incorrect')) {
-          toast('Incorect credentials');
-          context.pop();
-        } else if (e.code == "network-request-failed") {
-          toast(
-              "Network request failed. Please check your internet connection.");
-          context.pop();
-        } else if (e.code == "user-not-found") {
-          toast("User not found !");
-        } else if (e.code == "wrong-password") {
-          toast("password is not correct !");
-          context.pop();
-        } else if (e.code == "INVALID_LOGIN_CREDENTIALS") {
-          toast("invalid credentiels");
-          context.pop();
-        } else {
-          toast("An error occurred. Please try again later.");
-          context.pop();
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('Errorrrrrrrrrrrrr: $e');
+          if (e.code.contains('The supplied auth credential is incorrect')) {
+            toast('Incorect credentials');
+            context.pop();
+          } else if (e.code == "network-request-failed") {
+            toast(
+                "Network request failed. Please check your internet connection.");
+            context.pop();
+          } else if (e.code == "user-not-found") {
+            toast("User not found !");
+          } else if (e.code == "wrong-password") {
+            toast("password is not correct !");
+            context.pop();
+          } else if (e.code == "INVALID_LOGIN_CREDENTIALS") {
+            toast("invalid credentiels");
+            context.pop();
+          } else {
+            toast("An error occurred. Please try again later.");
+            context.pop();
+          }
         }
-      }
-    } 
-       catch (e) {
+      } catch (e) {
         Navigator.pop(context);
         if (e.toString().contains('too many requests, try again later')) {
           showSnackBar(
@@ -170,43 +166,43 @@ class _LoginState extends ConsumerState<Login> {
                         ),
                       ),
                       const SizedBox(height: 50),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: InContainer(
-                              color: value ? kcolorMainPrimary : Colors.white,
-                              text: 'Login up as a Tutor',
-                              icon: 'assets/icons/tutor.svg',
-                              onTap: () {
-                                print('--------------------');
-                                _currentIndexNotifier.value =
-                                    !_currentIndexNotifier.value;
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                //   return const SignUp();
-                                // }));
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 30),
-                          Expanded(
-                            child: InContainer(
-                              color: !value ? kcolorMainPrimary : Colors.white,
-                              text: 'Login up as a Student',
-                              icon: 'assets/icons/student.svg',
-                              onTap: () {
-                                _currentIndexNotifier.value =
-                                    !_currentIndexNotifier.value;
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                //   return const SignUp();
-                                // }));
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   children: [
+                      //     Expanded(
+                      //       child: InContainer(
+                      //         color: value ? kcolorMainPrimary : Colors.white,
+                      //         text: 'Login up as a Tutor',
+                      //         icon: 'assets/icons/tutor.svg',
+                      //         onTap: () {
+                      //           print('--------------------');
+                      //           _currentIndexNotifier.value =
+                      //               !_currentIndexNotifier.value;
+                      //           // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      //           //   return const SignUp();
+                      //           // }));
+                      //         },
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 30),
+                      //     Expanded(
+                      //       child: InContainer(
+                      //         color: !value ? kcolorMainPrimary : Colors.white,
+                      //         text: 'Login up as a Student',
+                      //         icon: 'assets/icons/student.svg',
+                      //         onTap: () {
+                      //           _currentIndexNotifier.value =
+                      //               !_currentIndexNotifier.value;
+                      //           // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      //           //   return const SignUp();
+                      //           // }));
+                      //         },
+                      //       ),
+                      //     ),
+                      //     const SizedBox(height: 10),
+                      //   ],
+                      // ),
 
                       // const ChooseAccount(),
                       const SizedBox(height: 50),
@@ -363,31 +359,51 @@ class _LoginState extends ConsumerState<Login> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const Text.rich(
-                        TextSpan(
-                          children: [
+                      Row(
+                        children: [
+                          const Text.rich(
                             TextSpan(
-                              text: 'Forgot password? ',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'Nunito',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Forgot password? ',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Nunito',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'click here',
+                                  style: TextStyle(
+                                    color: Color(0xFFC5D86D),
+                                    fontSize: 16,
+                                    fontFamily: 'Nunito',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
+                                ),
+                              ],
                             ),
-                            TextSpan(
-                              text: 'click here',
-                              style: TextStyle(
-                                color: Color(0xFFC5D86D),
-                                fontSize: 16,
-                                fontFamily: 'Nunito',
-                                fontWeight: FontWeight.w700,
-                                height: 0,
-                              ),
+                          ),
+                          const Spacer(),
+                          const Text(
+                            'Register',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.w400,
+                              height: 0,
                             ),
-                          ],
-                        ),
+                          ).onTap(() {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignUp()));
+                          })
+                        ],
                       )
                     ],
                   ),

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:insync/views/authentication/login/login.dart';
+import 'package:insync/views/onboarding/onboarding.dart';
 import 'package:insync/views/tutor/mainApp.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +46,10 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (user == null) {
       // User is not logged in, navigate to SignIn screen
-      context.pushReplacement('/onboarding');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const Onboarding()),
+      );
     } else if (prefs.getBool('isTutor') == true) {
       // User if its a tutor, navigate to tutor screen else navigate to student screen
       Navigator.push(

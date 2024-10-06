@@ -7,7 +7,6 @@ import 'package:insync/utils/colors.dart';
 import 'package:insync/views/authentication/login/login.dart';
 import 'package:insync/views/tutor/mainApp.dart';
 
-
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
 
@@ -168,44 +167,6 @@ class _SignUpState extends ConsumerState<SignUp> {
                           ),
                         ),
                         const SizedBox(height: 50),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: InContainer(
-                                color: value ? kcolorMainPrimary : Colors.white,
-                                text: 'Sign up as a Tutor',
-                                icon: 'assets/icons/tutor.svg',
-                                onTap: () {
-                                  print('--------------------');
-                                  _currentIndexNotifier.value =
-                                      !_currentIndexNotifier.value;
-                                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  //   return const SignUp();
-                                  // }));
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 30),
-                            Expanded(
-                              child: InContainer(
-                                color:
-                                    !value ? kcolorMainPrimary : Colors.white,
-                                text: 'Sign up as a Student',
-                                icon: 'assets/icons/student.svg',
-                                onTap: () {
-                                  _currentIndexNotifier.value =
-                                      !_currentIndexNotifier.value;
-                                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  //   return const SignUp();
-                                  // }));
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
 
                         // const ChooseAccount(),
                         const SizedBox(height: 50),
