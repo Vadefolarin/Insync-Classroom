@@ -8,7 +8,6 @@ import 'package:insync/views/authentication/controllers/auth_controller.dart';
 import 'package:insync/views/authentication/signUp/signUp.dart';
 import 'package:insync/views/tutor/mainApp.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({super.key});

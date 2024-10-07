@@ -1,11 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:insync/utils/colors.dart';
 import 'package:insync/views/authentication/login/login.dart';
 import 'package:insync/views/tutor/mainApp.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../../utils/utils.dart';
+import '../controllers/auth_controller.dart';
 
 class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
@@ -44,67 +50,98 @@ class _SignUpState extends ConsumerState<SignUp> {
   }
 
   // sign user in method
-  void signUserUp(bool isTutor) async {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => MainApp(isTutor: isTutor),
-        //  const QuizScreen(),
-      ),
-      (route) => false,
-    );
-    // if (_formKey.currentState!.validate()) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return const Center(
-    //         child: L oader(),
-    //       );
-    //     },
-    //   );
-    //   print(emailController.text);
-    //   print(passwordController.text);
+  void signUserUp() async {
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(
+    //     builder: (context) => MainApp(isTutor: isTutor),
+    //     //  const QuizScreen(),
+    //   ),
+    //   (route) => false,
+    // );
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: Loader(),
+          );
+        },
+      );
+      print(emailController.text);
+      print(passwordController.text);
 
-    //   try {
-    //     await ref.read(authControllerProvider).signUp(
-    //           email: emailController.text,
-    //           password: passwordController.text,
-    //           context: context,
-    //           isTutor: isTutor,
-    //         );
+      try {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        bool isTutor = prefs.getBool('isTutor') ?? false;
+        await ref.read(authControllerProvider).signUp(
+              email: emailController.text,
+              password: passwordController.text,
+              context: context,
+              isTutor: isTutor,
+            );
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
 
-    //     Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(
-    //         builder: (context) => const MainApp(
-    //           isTutor: true,
-    //         ),
-    //       ),
-    //       (route) => false,
-    //     );
-    //     final prefs = await SharedPreferences.getInstance();
-    //     prefs.setBool('isLoggedIn', true);
-    //   } catch (e) {
-    //     Navigator.pop(context);
-    //     if (e.toString().contains('too many requests, try again later')) {
-    //       showSnackBar(
-    //           context, "Too many requests, try again later", MessageType.error);
-    //     } else if (e.toString().contains('email-already-in-use')) {
-    //       showSnackBar(context, "Email already in use", MessageType.error);
-    //     } else if (e.toString().contains('invalid-email')) {
-    //       showSnackBar(context, "Invalid email", MessageType.error);
-    //     } else if (e.toString().contains('weak-password')) {
-    //       showSnackBar(context, "Weak password", MessageType.error);
-    //     } else if (e.toString()
-    //         .contains(' The account already exists for that email')) {
-    //       showSnackBar(context, "The account already exists for that email",
-    //           MessageType.error);
-    //     } else {
-    //       showSnackBar(context, "An error occured", MessageType.error);
-    //     }
-    //     ;
-    //     print('$e+++++++++++++');
-    //     loginInErrorMessage(null);
-    //   }
-    // }
+        print("Email: ${prefs.getBool('isTutor').toString()}");
+
+        if (isTutor == true) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .set({
+            'name': firstnameController.text.trim() +
+                lastnameController.text.trim(),
+            'email': emailController.text.trim(),
+            'role': 'teacher', // Storing the role as student
+            'createdAt': DateTime.now(),
+          });
+        } else {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .set({
+            'name': firstnameController.text.trim() +
+                lastnameController.text.trim(),
+            'email': emailController.text.trim(),
+            'role': 'student', // Storing the role as student
+            'createdAt': DateTime.now(),
+          });
+        }
+
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => MainApp(
+              isTutor: isTutor,
+            ),
+          ),
+          (route) => false,
+        );
+      } catch (e) {
+        Navigator.pop(context);
+        if (e.toString().contains('too many requests, try again later')) {
+          showSnackBar(
+              context, "Too many requests, try again later", MessageType.error);
+        } else if (e.toString().contains('email-already-in-use')) {
+          showSnackBar(context, "Email already in use", MessageType.error);
+        } else if (e.toString().contains('invalid-email')) {
+          showSnackBar(context, "Invalid email", MessageType.error);
+        } else if (e.toString().contains('weak-password')) {
+          showSnackBar(context, "Weak password", MessageType.error);
+        } else if (e
+            .toString()
+            .contains(' The account already exists for that email')) {
+          showSnackBar(context, "The account already exists for that email",
+              MessageType.error);
+        } else {
+          showSnackBar(context, "An error occured", MessageType.error);
+        }
+        print('$e+++++++++++++');
+        loginInErrorMessage(null);
+      }
+    }
   }
 
   void loginInErrorMessage(String? errorMsg) {
@@ -444,7 +481,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                         InkWell(
                           onTap: () {
                             //print(!value ? true : false);
-                            signUserUp(value ? true : false);
+                            signUserUp();
                             // Navigator.pushReplacement(
                             //   context,
                             //   MaterialPageRoute(

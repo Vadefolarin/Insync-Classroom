@@ -8,7 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:provider/provider.dart';
 
 import '../../../models/user_model.dart';
 import 'profile_form.dart';
