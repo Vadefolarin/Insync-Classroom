@@ -1,5 +1,7 @@
 // File: lib/screens/dashboard_screen.dart
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -11,16 +13,31 @@ import 'widget/section_tile.dart';
 import 'widget/upcoming_deadline.dart';
 import 'widget/welcome_header.dart';
 
-class HomeScreen extends StatelessWidget {
-  // Mock Data
-  final String teacherName = "Mr. Smith";
-  final String profileImageUrl =
-      "https://www.w3schools.com/howto/img_avatar.png"; // Placeholder image
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // Mock Data
+  String? teacherName;
+  bool _isLoading = true;
+
+  final String profileImageUrl =
+      "https://www.w3schools.com/howto/img_avatar.png";
+  // Placeholder image
   final List<Quiz> upcomingQuizzes = [
-    Quiz(title: "Math Quiz 1", deadline: DateTime.now().add(const Duration(days: 2))),
-    Quiz(title: "Science Quiz 2", deadline: DateTime.now().add(const Duration(days: 5))),
-    Quiz(title: "History Quiz 3", deadline: DateTime.now().add(const Duration(days: 7))),
+    Quiz(
+        title: "Math Quiz 1",
+        deadline: DateTime.now().add(const Duration(days: 2))),
+    Quiz(
+        title: "Science Quiz 2",
+        deadline: DateTime.now().add(const Duration(days: 5))),
+    Quiz(
+        title: "History Quiz 3",
+        deadline: DateTime.now().add(const Duration(days: 7))),
   ];
 
   final List<Activity> recentActivities = [
@@ -62,7 +79,7 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
     ]),
-     BarChartGroupData(x: 2, barRods: [
+    BarChartGroupData(x: 2, barRods: [
       BarChartRodData(
         fromY: 90,
         toY: 100,
@@ -70,7 +87,7 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
     ]),
-      BarChartGroupData(x: 3, barRods: [
+    BarChartGroupData(x: 3, barRods: [
       BarChartRodData(
         fromY: 70,
         toY: 100,
@@ -78,7 +95,7 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
     ]),
-        BarChartGroupData(x: 4, barRods: [
+    BarChartGroupData(x: 4, barRods: [
       BarChartRodData(
         fromY: 85,
         toY: 100,
@@ -86,7 +103,7 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
     ]),
-         BarChartGroupData(x: 5, barRods: [
+    BarChartGroupData(x: 5, barRods: [
       BarChartRodData(
         fromY: 100,
         toY: 75,
@@ -94,7 +111,7 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
       ),
     ]),
-    
+
     // BarChartGroupData(x: 2, barRods: [
     //   BarChartRodData(y: 90, colors: [Colors.blue])
     // ]),
@@ -109,8 +126,37 @@ class HomeScreen extends StatelessWidget {
     // ]),
   ];
 
-   HomeScreen({super.key});
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserName();
+  }
 
+  Future<void> _fetchUserName() async {
+    try {
+      // Get the currently authenticated user
+      User? user = FirebaseAuth.instance.currentUser;
+      String userId = user!.uid;
+
+      // Fetch user document from Firestore
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+
+      if (userSnapshot.exists) {
+        setState(() {
+          teacherName =
+              userSnapshot['name']; // Fetch 'name' field from the document
+        });
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +168,7 @@ class HomeScreen extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      
+
       body: RefreshIndicator(
         onRefresh: () async {
           // Implement pull-to-refresh functionality here
@@ -137,7 +183,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               // Welcome Header
               WelcomeHeader(
-                teacherName: teacherName,
+                teacherName: _isLoading ? "...." : teacherName!,
                 profileImageUrl: profileImageUrl,
               ),
               const SizedBox(height: 16),
