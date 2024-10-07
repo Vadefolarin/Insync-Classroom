@@ -105,6 +105,7 @@ class _SignUpState extends ConsumerState<SignUp> {
             'createdAt': DateTime.now(),
           });
         }
+        toast('Sign Up Successfull');
 
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(

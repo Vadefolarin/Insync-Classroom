@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../utils/loader.dart';
 
 class QuizForm extends StatefulWidget {
   final String title;
@@ -15,6 +18,8 @@ class _QuizFormState extends State<QuizForm> {
   final _formKey = GlobalKey<FormState>();
   final List<Quiz> _quizzes = [];
 
+  String? userId;
+
   @override
   void initState() {
     super.initState();
@@ -22,6 +27,12 @@ class _QuizFormState extends State<QuizForm> {
     for (int i = 0; i < 3; i++) {
       _quizzes.add(Quiz());
     }
+    _fetchUserDetails();
+  }
+
+  Future<void> _fetchUserDetails() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    userId = user!.uid;
   }
 
   void _addQuiz() {
@@ -33,7 +44,14 @@ class _QuizFormState extends State<QuizForm> {
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: Loader(),
+          );
+        },
+      );
       // Prepare quiz data for Firestore
       List<Map<String, dynamic>> quizData = [];
       for (var quiz in _quizzes) {
@@ -52,7 +70,7 @@ class _QuizFormState extends State<QuizForm> {
         'title': widget.title,
         'description': widget.description,
         'questions': quizData,
-        'createdBy': 'teacherId', // Replace with actual teacherId
+        'createdBy': userId, // Replace with actual teacherId
         'createdAt': FieldValue.serverTimestamp(),
         'deadline': FieldValue.serverTimestamp(), // Customize as needed
       };
@@ -65,6 +83,7 @@ class _QuizFormState extends State<QuizForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Quiz submitted successfully!')),
         );
+        Navigator.pop(context);
         Navigator.pop(context);
       } catch (e) {
         // Handle error

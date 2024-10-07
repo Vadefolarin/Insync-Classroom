@@ -24,9 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // Mock Data
   String? teacherName;
   bool _isLoading = true;
+  String? profileImageUrl;
 
-  final String profileImageUrl =
-      "https://www.w3schools.com/howto/img_avatar.png";
   // Placeholder image
   final List<Quiz> upcomingQuizzes = [
     Quiz(
@@ -145,10 +144,16 @@ class _HomeScreenState extends State<HomeScreen> {
           .get();
 
       if (userSnapshot.exists) {
+        print('+++++++++++Is Available');
+        print('......${userSnapshot['name']}');
         setState(() {
+          _isLoading = false;
           teacherName =
               userSnapshot['name']; // Fetch 'name' field from the document
+          profileImageUrl = userSnapshot['profilePictureUrl'];
         });
+      } else {
+        print('+++++++++++Not  Available');
       }
     } catch (e) {
       print("Error fetching user data: $e");
@@ -182,10 +187,13 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Welcome Header
-              WelcomeHeader(
-                teacherName: _isLoading ? "...." : teacherName!,
-                profileImageUrl: profileImageUrl,
-              ),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : WelcomeHeader(
+                      teacherName: teacherName ?? 'User',
+                      profileImageUrl: profileImageUrl ??
+                          "https://www.w3schools.com/howto/img_avatar.png",
+                    ),
               const SizedBox(height: 16),
 
               // Quick Actions
