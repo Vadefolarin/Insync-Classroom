@@ -1,308 +1,230 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:insync/views/student/quizzes/join_quiz.dart';
-import 'package:insync/views/student/quizzes/quiz_screen.dart';
-import 'package:insync/views/tutor/dashboard/home.dart';
+import 'package:intl/intl.dart';
 
-import '../../onboarding/continue_as.dart';
+import 'take_quiz_screen.dart';
 
 class StudentHomeScreen extends StatefulWidget {
   const StudentHomeScreen({super.key});
 
   @override
-  State<StudentHomeScreen> createState() => _StudentHomeScreenState();
+  _StudentHomeScreenState createState() => _StudentHomeScreenState();
 }
 
 class _StudentHomeScreenState extends State<StudentHomeScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  List upComingQuizdata = [];
-
-  @override
   Widget build(BuildContext context) {
-    getQuestions();
     return Scaffold(
-      // floatingActionButton: FloatingActionButton.extended(
-      //   backgroundColor: const Color(0xFFFFEDDF),
-      //   onPressed: () {
-      //     showDialog(
-      //       context: context,
-      //       builder: (context) => const AlertDialog(
-      //         content: JoinQuiz(),
-      //       ),
-      //     );
-      //   },
-      //   label: const Row(
-      //     children: [
-      //       Icon(
-      //         Icons.add_alarm,
-      //         color: Color(0xFF0D1321),
-      //       ),
-      //       SizedBox(width: 5),
-      //       Text(
-      //         'Join Quiz',
-      //         style: TextStyle(
-      //           color: Color(0xFF0D1321),
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Adedayo Victor',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontFamily: 'Nunito',
-                            ),
-                          ),
-                          Text('IFT/17/2390',
-                              style: TextStyle(
-                                color: Color(0xFFC5D86D),
-                                fontSize: 14,
-                                fontFamily: 'Nunito',
-                                fontWeight: FontWeight.w700,
-                              ))
-                        ]),
-                    const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.logout, color: Colors.deepPurple),
-                      onPressed: () {
-                        print('User logged out');
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Log Out'),
-                              content: const Text(
-                                  'Are you sure you want to log out?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await FirebaseAuth.instance.signOut();
-                                    Navigator.of(context).pop();
-                                    Navigator.pushReplacement(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return const ContinueAsWidget();
-                                    }));
-                                  },
-                                  child: const Text('Log Out',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                    
-                    
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    Stack(
-                      children: [
-                        const Icon(Icons.notifications),
-                        Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFC5D86D),
-                                  borderRadius: BorderRadius.circular(10),
-                                )))
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                StudentUpcomingQuizSlide(
-                  isfullScreen: false,
-                  upcomingQuizData: upComingQuizdata,
-                ),
-                const SizedBox(height: 20),
-                // const CompletedtQuiz(
-                //   isfullScreen: false,
-                // ),
-                const SizedBox(height: 20),
-              ],
-            ),
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text('Student Dashboard',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.blueAccent,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+
+              _buildWelcomeBanner(),
+              const SizedBox(height: 20),
+              _buildSectionTitle('Active Quizzes'),
+              _buildQuizList(
+                  fetchActiveQuizzes(), false), // Fetch active quizzes
+              const SizedBox(height: 20),
+              _buildSectionTitle('Completed Quizzes'),
+              _buildQuizList(
+                  fetchCompletedQuizzes(), true), // Fetch completed quizzes
+            ],
           ),
         ),
       ),
     );
   }
 
-  void getQuestions() async {
-    CollectionReference questions =
-        FirebaseFirestore.instance.collection('teachers');
-
-    QuerySnapshot querySnapshot = await questions.get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    Future.delayed(const Duration(seconds: 5), () {
-      print('++++ $allData++++');
-      setState(() {
-        upComingQuizdata = allData;
-      });
-      print('________________________ ');
-
-      print('${upComingQuizdata.map((e) => e['title'])}');
-    });
-  }
-}
-
-class StudentUpcomingQuizSlide extends StatelessWidget {
-  StudentUpcomingQuizSlide({
-    super.key,
-    required this.isfullScreen,
-    required this.upcomingQuizData,
-  });
-  final bool isfullScreen;
-  List upcomingQuizData;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildWelcomeBanner() {
     return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: const Color(0xff00000033).withOpacity(0.20),
-        ),
-        boxShadow: [
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: const [
           BoxShadow(
-            color: const Color(0xff00000033).withOpacity(0.20),
+            color: Colors.black26,
             blurRadius: 10,
-            offset: const Offset(0, 5),
+            offset: Offset(0, 4),
           ),
         ],
       ),
-      padding: const EdgeInsets.only(
-        top: 15,
-        bottom: 25,
-        left: 15,
-        right: 15,
-      ),
-      child: Column(
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Text(
-                'Upcoming quizzes',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontFamily: 'Nunito',
-                  fontWeight: FontWeight.w700,
-                  height: 0,
-                ),
-              ),
-              const Spacer(),
-              isfullScreen
-                  ? const SizedBox()
-                  : const Text(
-                      'Quiz directory',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-              const SizedBox(width: 5),
-              isfullScreen
-                  ? const SizedBox()
-                  : const Icon(
-                      Icons.arrow_forward,
-                      color: Color(0xFFC5D86D),
-                    )
-            ],
+          Text(
+            'Welcome Back!',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          const SizedBox(height: 20),
-          SingleChildScrollView(
-            child: Column(
-              children: upcomingQuizData
-                  .map(
-                    (e) => InkWell(
-                      onTap: () {
-                        List newQuestion = e['questions'];
-                        List newAnswer = e['answers'];
-                        // newQuestion.add(e['questions'].toString());
-                        // newQuestion.expand((element) );
-
-                        print(newQuestion);
-
-                        print(newAnswer);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => QuizScreen(
-                              // question: e['questions'],
-                              question: newQuestion,
-                              quizanswers: newAnswer,
-                            ),
-                          ),
-                        );
-                      },
-                      child: e['title'] == ''
-                          ? const Text(
-                              'No Upcoming Quiz at the monet',
-                              style: TextStyle(color: Colors.black),
-                            )
-                          : const Center(
-                              child: Text('Removed'),
-                            ),
-                      // : UpcomingQuizCard(
-                      //     title: e['title'],
-                      //     date: e['description'],
-                      //   ),
-                    ),
-                  )
-                  .toList(),
-
-              // UpcomingQuizCard(
-              //   title: 'Introduction to computer\nprogramming',
-              //   date: '12 / 03 / 2023 | 09:00 AM',
-              // ),
-              // SizedBox(height: 20),
-              // UpcomingQuizCard(
-              //   title: 'Theory of computation',
-              //   date: '27 / 05 / 2023 | 12:30 PM',
-              // ),
-              // ],
+          SizedBox(height: 8),
+          Text(
+            '"Stay focused and ace your quizzes!"',
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuizList(
+      Future<List<Map<String, dynamic>>> quizzesFuture, bool isCompleted) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: quizzesFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Text('No quizzes available.');
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: snapshot.data!.length,
+          itemBuilder: (context, index) {
+            final quiz = snapshot.data![index];
+            final Timestamp deadlineTimestamp = quiz['deadline'];
+            final DateTime deadlineDate = deadlineTimestamp.toDate();
+            final formattedDate =
+                DateFormat('MMM dd, yyyy – hh:mm a').format(deadlineDate);
+
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              elevation: 4,
+              margin: const EdgeInsets.only(bottom: 16),
+              child: ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                title: Text(
+                  quiz['title'] ?? 'Quiz Title',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 6),
+                    Text(
+                      quiz['description'] ?? 'Quiz Description',
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Icon(Icons.calendar_today,
+                            color: Colors.redAccent, size: 18),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Deadline: $formattedDate',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.redAccent),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                trailing: isCompleted
+                    ? const Icon(Icons.check_circle, color: Colors.green)
+                    : const Icon(Icons.arrow_forward_ios,
+                        color: Colors.blueAccent),
+                onTap: isCompleted
+                    ? () {
+                        // Navigate to result page (for completed quizzes)
+                        _showQuizResult(quiz);
+                      }
+                    : () {
+                        // Navigate to take quiz page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TakeQuizScreen(quizId: quiz['id']),
+                          ),
+                        );
+                      },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> fetchActiveQuizzes() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('quizzes')
+        .where('deadline', isGreaterThan: Timestamp.now())
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchCompletedQuizzes() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('quizzes')
+        .where('completedBy',
+            arrayContains: 'studentId') // Assume studentId is used
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
+
+  void _showQuizResult(Map<String, dynamic> quiz) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Quiz Result'),
+          content: Text('You scored: ${quiz['score']}'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

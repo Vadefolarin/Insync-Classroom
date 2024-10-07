@@ -16,23 +16,28 @@ class StudentQuizzes extends ConsumerWidget {
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        body: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             children: [
-              const TabBar(
+              TabBar(
                 tabs: [
                   Tab(text: 'Upcoming'),
                   Tab(text: 'Completed'),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Expanded(
                 child: TabBarView(
                   children: [
-                    StudentUpcomingQuizSlide(
-                        isfullScreen: true, upcomingQuizData: const []),
-                           const Center(child: Text('Removed'),),
+                    Center(
+                      child: Text('Removed'),
+                    ),
+                    // StudentUpcomingQuizSlide(
+                    //     isfullScreen: true, upcomingQuizData: const []),
+                    Center(
+                      child: Text('Removed'),
+                    ),
                     // const CompletedtQuiz(isfullScreen: true),
                   ],
                 ),
