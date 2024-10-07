@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:insync/views/authentication/signUp/signUp.dart';
 
 import 'package:nb_utils/nb_utils.dart';
 
@@ -89,8 +90,10 @@ class _ContinueAsWidgetState extends State<ContinueAsWidget> {
                 width: 200,
                 onTap: () {
                   if (_selectedRole.isNotEmpty) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const Login()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUp()));
                     // Navigator.pushNamed(context, 'login');
                   }
                 },

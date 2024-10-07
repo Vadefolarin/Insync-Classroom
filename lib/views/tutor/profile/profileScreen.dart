@@ -8,8 +8,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 import '../../../models/user_model.dart';
+import '../../onboarding/continue_as.dart';
 import 'profile_form.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -68,13 +68,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to load profile. Please try again.')),
+        const SnackBar(
+            content: Text('Failed to load profile. Please try again.')),
       );
     }
   }
 
   // Update the user's profile
-  Future<void> _updateProfile(UserModel updatedUser, File? newProfileImage) async {
+  Future<void> _updateProfile(
+      UserModel updatedUser, File? newProfileImage) async {
     setState(() {
       _isUpdating = true;
     });
@@ -85,8 +87,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       // If a new profile image is selected, upload it to Firebase Storage
       if (newProfileImage != null) {
-        Reference storageRef =
-            _storage.ref().child('profile_pictures').child(uid).child('profile.jpg');
+        Reference storageRef = _storage
+            .ref()
+            .child('profile_pictures')
+            .child(uid)
+            .child('profile.jpg');
         UploadTask uploadTask = storageRef.putFile(newProfileImage);
         TaskSnapshot snapshot = await uploadTask;
         profilePictureUrl = await snapshot.ref.getDownloadURL();
@@ -112,7 +117,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print('Error updating profile: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to update profile. Please try again.')),
+        const SnackBar(
+            content: Text('Failed to update profile. Please try again.')),
       );
     } finally {
       setState(() {
@@ -122,7 +128,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Change Password
-  Future<void> _changePassword(String currentPassword, String newPassword) async {
+  Future<void> _changePassword(
+      String currentPassword, String newPassword) async {
     try {
       setState(() {
         _isUpdating = true;
@@ -156,7 +163,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       print('Error changing password: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to change password. Please try again.')),
+        const SnackBar(
+            content: Text('Failed to change password. Please try again.')),
       );
     } finally {
       setState(() {
@@ -167,8 +175,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Sign Out
   Future<void> _signOut() async {
-    await _auth.signOut();
+    // await _auth.signOut();
     // Optionally, navigate to the login screen
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Log Out'),
+          content: const Text('Are you sure you want to log out?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) {
+                  return const ContinueAsWidget();
+                }));
+              },
+              child: const Text('Log Out',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -177,10 +219,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: _isLoading
           ? null
           : AppBar(
-              title: const Text('Profile', style: TextStyle(color: Colors.white)),
+              title:
+                  const Text('Profile', style: TextStyle(color: Colors.white)),
               backgroundColor: Colors.blue,
-                      automaticallyImplyLeading: false,
-
+              automaticallyImplyLeading: false,
               actions: [
                 IconButton(
                   icon: const Icon(Icons.logout),
@@ -255,9 +297,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      textStyle:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      textStyle: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     child: const Text('Change Password'),
                   ),
@@ -291,7 +334,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // Current Password
                 TextField(
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: "Current Password"),
+                  decoration:
+                      const InputDecoration(labelText: "Current Password"),
                   onChanged: (value) {
                     currentPassword = value;
                   },
@@ -307,7 +351,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // Confirm Password
                 TextField(
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: "Confirm New Password"),
+                  decoration:
+                      const InputDecoration(labelText: "Confirm New Password"),
                   onChanged: (value) {
                     confirmPassword = value;
                   },

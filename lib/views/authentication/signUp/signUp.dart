@@ -73,12 +73,7 @@ class _SignUpState extends ConsumerState<SignUp> {
       try {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         bool isTutor = prefs.getBool('isTutor') ?? false;
-        await ref.read(authControllerProvider).signUp(
-              email: emailController.text,
-              password: passwordController.text,
-              context: context,
-              isTutor: isTutor,
-            );
+
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
@@ -119,8 +114,19 @@ class _SignUpState extends ConsumerState<SignUp> {
           ),
           (route) => false,
         );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          toast('The password provided is too weak.');
+
+          print('The password provided is too weak.');
+          context.pop();
+        } else if (e.code == 'email-already-in-use') {
+          toast('The account already exists for that email.');
+          print('The account already exists for that email.');
+          context.pop();
+        }
       } catch (e) {
-        Navigator.pop(context);
+        context.pop(context);
         if (e.toString().contains('too many requests, try again later')) {
           showSnackBar(
               context, "Too many requests, try again later", MessageType.error);
@@ -139,7 +145,7 @@ class _SignUpState extends ConsumerState<SignUp> {
           showSnackBar(context, "An error occured", MessageType.error);
         }
         print('$e+++++++++++++');
-        loginInErrorMessage(null);
+        loginInErrorMessage(e.toString());
       }
     }
   }
