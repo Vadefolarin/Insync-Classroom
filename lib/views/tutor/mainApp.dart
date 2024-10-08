@@ -3,11 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:insync/utils/colors.dart';
 import 'package:insync/views/student/dashboard/home.dart';
 import 'package:insync/views/student/quizzes/quizzes.dart';
-import 'package:insync/views/student/results/results.dart';
+import 'package:insync/views/student/studentProfile/studentProfile.dart';
 import 'package:insync/views/tutor/dashboard/home.dart';
 import 'package:insync/views/tutor/quizzes/quizzes.dart';
 import 'package:insync/views/tutor/profile/profileScreen.dart';
 import 'package:insync/views/tutor/students/students.dart';
+
+import '../student/dashboard/announcement_screen.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key, required this.isTutor});
@@ -82,13 +84,13 @@ class _MainAppState extends State<MainApp> {
                   ],
                 ),
                 body: value == 0
-                    ?  HomeScreen()
+                    ? const HomeScreen()
                     : value == 1
-                        ?  const QuizScreen()
+                        ? const QuizScreen()
                         : value == 2
-                            ?  const AnalyticScreen()
+                            ? const AnalyticScreen()
                             : value == 3
-                                ?  const ProfileScreen()
+                                ? const ProfileScreen()
                                 : Container(),
               )
             // for students
@@ -109,39 +111,48 @@ class _MainAppState extends State<MainApp> {
                     fontWeight: FontWeight.w400,
                     color: Colors.grey,
                   ),
-                  selectedItemColor: kcolorMainPrimary,
-                  unselectedItemColor: Colors.black,
-                  items: <BottomNavigationBarItem>[
+                  selectedItemColor: Colors.blue,
+                  unselectedItemColor: Colors.blueGrey,
+                  items: const <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/icons/home.svg',
-                        // color: value == 0 ? kColorMainPrimary : kColorMediumGray,
+                      icon: Icon(
+                        Icons.home_max_rounded,
+                        size: 30,
                       ),
                       label: 'Home',
                     ),
                     BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/icons/quizzes.svg',
-                        // color: value == 0 ? kColorMainPrimary : kColorMediumGray,
+                      icon: Icon(
+                        Icons.notifications,
+                        size: 30,
+                      ),
+                      label: 'Announcement',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.quiz,
+                        size: 27,
                       ),
                       label: 'Quizzes',
                     ),
                     BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        'assets/icons/results.svg',
-                        // color: value == 2 ? kColorMainPrimary : kColorMediumGray,
+                      icon: Icon(
+                        Icons.person_3,
+                        size: 30,
                       ),
-                      label: 'Results',
+                      label: 'Profile',
                     ),
                   ],
                 ),
                 body: value == 0
                     ? const StudentHomeScreen()
                     : value == 1
-                        ? const StudentQuizzes()
+                        ? AnnouncementScreen()
                         : value == 2
-                            ? const StudentResultsScreen()
-                            : Container(),
+                            ? const StudentQuizzes()
+                            : value == 3
+                                ? const StudentProfileScreen()
+                                : Container(),
               );
       },
     );

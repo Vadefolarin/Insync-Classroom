@@ -21,6 +21,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
             style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blueAccent,
         elevation: 0,
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
